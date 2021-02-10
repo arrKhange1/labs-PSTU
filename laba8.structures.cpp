@@ -16,7 +16,7 @@ istream& operator >> (istream& ci, Government& arr)
 }
 void gov_fill(Government* arr, int lenArr)
 {
-	cout << "ââîäè " << lenArr << " ãîñóäàðñòâà:\n";
+	cout << "Ã¢Ã¢Ã®Ã¤Ã¨ " << lenArr << " Ã£Ã®Ã±Ã³Ã¤Ã Ã°Ã±Ã²Ã¢Ã :\n";
 	for (int i = 0; i < lenArr; i++)
 	{
 		cin >> arr[i];
@@ -118,7 +118,7 @@ int main()s
 	cout << endl;
 
 	string del_name;
-	cout << "ââåäèòå ñòðàíó äëÿ óäàëåíèÿ: ";
+	cout << "Ã¢Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã±Ã²Ã°Ã Ã­Ã³ Ã¤Ã«Ã¿ Ã³Ã¤Ã Ã«Ã¥Ã­Ã¨Ã¿: ";
 	cin >> del_name;
 	cout << endl;
 
@@ -126,7 +126,7 @@ int main()s
 	gov_out(gov_arr, gov_num);
 	cout << endl;
 
-	cout << "ââåäèòå åùå 2 ãîñóäàðñòâà äëÿ äîáàâëåíèÿ â êîíåö:\n";
+	cout << "Ã¢Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã¥Ã¹Ã¥ 2 Ã£Ã®Ã±Ã³Ã¤Ã Ã°Ã±Ã²Ã¢Ã  Ã¤Ã«Ã¿ Ã¤Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¿ Ã¢ ÃªÃ®Ã­Ã¥Ã¶:\n";
 	Government* arr_helper = new Government[gov_num + 2];
 	gov_elem_add(gov_arr, gov_num, arr_helper, gov_num + 2);
 	delete[]gov_arr;
