@@ -65,7 +65,7 @@ int vowel_letter(string temp)
 	int cnt = 0;
 	for (int i = 0; i < temp.length(); i++)
 	{
-		if (temp[i] == 'à' || temp[i] == 'î' || temp[i] == 'ó' || temp[i] == 'ý' || temp[i] == 'û' || temp[i] == 'ÿ' || temp[i] == '¸' || temp[i] == 'þ' || temp[i] == 'å' || temp[i] == 'è') cnt++;
+		if (temp[i] == 'Ã ' || temp[i] == 'Ã®' || temp[i] == 'Ã³' || temp[i] == 'Ã½' || temp[i] == 'Ã»' || temp[i] == 'Ã¿' || temp[i] == 'Â¸' || temp[i] == 'Ã¾' || temp[i] == 'Ã¥' || temp[i] == 'Ã¨') cnt++;
 	}
 	cout << "amount of vowel letters in the last string is " << cnt << endl;
 	return cnt;
