@@ -119,6 +119,18 @@ int ListAddBeforeFromEnd(DoubleDirList*& head, DoubleDirList*& tail, char* data_
 	return cnt;
 }
 
+void ListDelete(DoubleDirList*& head,DoubleDirList*&tail)
+{
+	DoubleDirList* now_ptr = head;
+	while (head != tail)
+	{
+		DoubleDirList* now_ptr = head;
+		head = head->next;
+		delete now_ptr;
+	}
+	delete head;
+}
+
 int main()
 {
 	int ListLen;	
@@ -130,7 +142,7 @@ int main()
 
 	cout << "enter " << ListLen << " symbols: ";
 	DoubleDirList* tail = ListFill(head, ListLen);
-	cout << endl;
+	//cout << endl;
 
 	ListLen = ListPrintFromBegin(head);
 	cout << endl;
@@ -152,6 +164,8 @@ int main()
 
 	ListPrintFromEnd(tail, ListLen);
 	cout << endl;
+
+	ListDelete(head,tail);
 
 	return 0;
 }
