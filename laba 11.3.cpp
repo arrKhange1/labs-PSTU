@@ -7,12 +7,22 @@ struct Stack
 	Stack* prev;
 };
 
-void StackAdd(Stack*& head, int elem)
+void StackFill(Stack*& head)
 {
-	Stack* new_elem = new Stack;
-	new_elem->data = elem;
-	new_elem->prev = head;
-	head = new_elem;
+	int elem;
+	int i = 1;
+	cout << i++ << ") ";
+	cin >> elem;
+	while (elem != 0)
+	{
+		Stack* new_elem = new Stack;
+		new_elem->data = elem;
+		new_elem->prev = head;
+		head = new_elem;
+		cout << i++ << ") ";
+		cin >> elem;
+	}
+	
 }
 
 void StackPrint(Stack*& head)
@@ -29,17 +39,45 @@ void StackPrint(Stack*& head)
 void StackDelLast(Stack*& head)
 {
 	Stack* now_ptr = head;
-	Stack* help = head;
+	Stack* head_help = nullptr;
+	Stack* now_ptr_help = head_help;
+	bool flag = false;
+
 	while (now_ptr->prev != nullptr)
 	{
-		help = now_ptr;
-		now_ptr = now_ptr->prev;
+		if (flag == false)
+		{
+			Stack* new_elem_help = new Stack;
+			new_elem_help->data = now_ptr->data;
+			head_help = new_elem_help;
+			now_ptr_help = new_elem_help;
+			flag = true;
+			Stack* del_ptr = now_ptr;
+			now_ptr = now_ptr->prev;
+			delete del_ptr;
+		}
+		else
+		{
+			Stack* new_elem_help = new Stack;
+			new_elem_help->data = now_ptr->data;
+			now_ptr_help->prev = new_elem_help;
+			now_ptr_help = new_elem_help;
+			Stack* del_ptr = now_ptr;
+			now_ptr = now_ptr->prev;
+			delete del_ptr;
+		}
 	}
-	if (now_ptr->data % 2 == 0)
+	
+	if (now_ptr->data % 2 != 0)
 	{
-		delete now_ptr;
-		help->prev = nullptr;
+		Stack* new_elem_help = new Stack;
+		new_elem_help->data = now_ptr->data;
+		now_ptr_help->prev = new_elem_help;
+		now_ptr_help = new_elem_help;
 	}
+	now_ptr_help->prev = nullptr;
+	delete now_ptr;
+	head = head_help;
 }
 
 void StackDel(Stack*& head)
@@ -57,18 +95,9 @@ int main()
 	int StackLen;
 	Stack* head = nullptr;
 	
-	cout << "enter elems while not the 0 digit: ";
-	int elem;
-	int cnt = 1;
-	cout << endl << cnt++ << ") ";
-	cin >> elem;
-	while (elem != 0)
-	{
-		cout << cnt++ << ") ";
-		if (elem == 0) break;
-		else StackAdd(head, elem);
-		cin >> elem;
-	}
+	cout << "enter elems while not the 0 digit: \n";
+
+	StackFill(head);
 
 	StackDelLast(head);
 	cout << endl;
