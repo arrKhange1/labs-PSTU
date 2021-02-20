@@ -2,7 +2,7 @@
 #include <stack>
 using namespace std;
 
-void deleteMid(stack<int>& st, int n, int curr = 0)
+void deleteLast(stack<int>& st, int n, int curr = 0)
 
 {
 
@@ -26,7 +26,7 @@ void deleteMid(stack<int>& st, int n, int curr = 0)
 
     // Îïóñòîøåíèå ñòåêà
 
-    deleteMid(st, n, curr + 1);
+    deleteLast(st, n, curr + 1);
 
 
 
@@ -58,7 +58,7 @@ int main()
     }
 
 
-    deleteMid(st, st.size());
+    deleteLast(st, st.size());
 
   
     cout << endl << "Èçìåíåííûé ñòåê:\n";
