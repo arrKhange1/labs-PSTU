@@ -27,7 +27,7 @@ int main()
 	}
 	cout << endl;
 	
-	cout << "Äîáàâëåíèå ïîñëå " << elem_after_add << " ñ íà÷àëà:\n\n";
+	cout << "Ã„Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¯Ã®Ã±Ã«Ã¥ " << elem_after_add << " Ã± Ã­Ã Ã·Ã Ã«Ã :\n\n";
 	cnt = 1;
 	for (it = DoubleDirList.begin(); it != DoubleDirList.end(); it++)
 	{
@@ -35,7 +35,7 @@ int main()
 	}
 
 	DoubleDirList.reverse();
-	cout << "\nÄîáàâëåíèå ïîñëå " << elem_after_add << " ñ êîíöà:\n";
+	cout << "\nÃ„Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¯Ã®Ã±Ã«Ã¥ " << elem_after_add << " Ã± ÃªÃ®Ã­Ã¶Ã :\n";
 
 	for (it = DoubleDirList.begin(); it != DoubleDirList.end(); it++)
 	{
