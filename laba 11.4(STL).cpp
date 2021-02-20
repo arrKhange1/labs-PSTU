@@ -13,11 +13,11 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     char elem_after_add;
-    cout << "Ââåäèòå ýë-ò, ïîñëå êîòîðîãî âñòàâëÿòü: ";
+    cout << "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã½Ã«-Ã², Ã¯Ã®Ã±Ã«Ã¥ ÃªÃ®Ã²Ã®Ã°Ã®Ã£Ã® Ã¢Ã±Ã²Ã Ã¢Ã«Ã¿Ã²Ã¼: ";
     cin >> elem_after_add;
     char elem;
     int i = 1;
-    cout << "\nÂâåäèòå ýë-òû î÷åðåäè:\n";
+    cout << "\nÃ‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã½Ã«-Ã²Ã» Ã®Ã·Ã¥Ã°Ã¥Ã¤Ã¨:\n";
     cout << i++ << ") ";
     cin >> elem;
     while (elem != '0')
@@ -37,7 +37,7 @@ int main()
         q.pop();
     }
     
-    cout << endl << "Èçìåíåííàÿ î÷åðåäü:\n";
+    cout << endl << "ÃˆÃ§Ã¬Ã¥Ã­Ã¥Ã­Ã­Ã Ã¿ Ã®Ã·Ã¥Ã°Ã¥Ã¤Ã¼:\n";
     i = 1;
     while (!q_new.empty())
     {
