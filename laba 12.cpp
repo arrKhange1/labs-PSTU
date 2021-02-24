@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include<windows.h>
 #include <time.h>
 #include <string>
@@ -173,11 +174,8 @@ int main()
 	SetConsoleOutputCP(1251);
 	srand(time(NULL));
 	setlocale(LC_ALL, "Rus");
-	DataBase* arr = new DataBase[10];
+	DataBase* arr = new DataBase[MAX];
 	
-	//int Len;
-	//cout << "vvedi Len: ";
-	//cin >> Len;
 	int random = rand() % 3 + 5;
 	for (int i = 0; i < random; i++)
 	{
@@ -191,25 +189,24 @@ int main()
 	List* head = nullptr;
 	ListFill(head,arr,random);
 	ListPrint(head);
+	ofstream file;
+	file.open("Changes.txt");
 
-	/*string a = "12";
-	string b = "71";
-	int c = atoi(string({ (char)a[0] }).c_str());
-	int l = atoi(string({ (char)b[0] }).c_str());
-	if (c < l) cout << true << endl;*/
 	
 	
-	DataBase* new_arr = new DataBase[10];
+	
+	DataBase* new_arr = new DataBase[MAX];
 	int random_help = random;
+	int cnt = 0;
 	string close;
-	while (close != "íåò")  // Menu
+	while (close != "нет")  // Menu
 	{
 		cout << endl;
-		cout << "Ìåíþ\n\n";
-		cout << "1. Ïîêàçàòü Áàçó Äàííûõ\n2. Íàéòè ëþäåé ïî äàòå ðîæäåíèÿ ñ ïîìîùüþ Èíòåðïîëà\n3. Íàéòè ëþäåé ïî äàòå ðîæäåíèÿ ñ ïîìîùüþ Ïðÿìîãî ïîèñêà\n4. Äîáàâèòü äàííûå î ÷åëîâåêå â êîíåö ÁÄ\n";
-		cout << "5. Äîáàâèòü äàííûå î ÷åëîâåêå â íà÷àëî ÁÄ\n6. Äîáàâèòü äàííûå î ÷åëîâåêå íà çàäàííîå ìåñòî â ÁÄ\n7. Óäàëèòü äàííûå î ÷åëîâåêå ïî èíäåêñó\n";
+		cout << "Меню\n\n";
+		cout << "1. Показать Базу Данных\n2. Найти людей по дате рождения с помощью Интерпола\n3. Найти людей по дате рождения с помощью Прямого поиска\n4. Добавить данные о человеке в конец БД\n";
+		cout << "5. Добавить данные о человеке в начало БД\n6. Добавить данные о человеке на заданное место в БД\n7. Удалять, пока не превысит половину БД\n8. Отменить последнее удаление\n";
 		int choice;
-		cout << "\nÂâîäèòå ïóíêò: ";
+		cout << "\nВводите пункт: ";
 		cin >> choice;
 		cout << "\n\n";
 
@@ -224,45 +221,45 @@ int main()
 		{
 			int* new_arr = strDates_to_intDates(arr, random);
 			string key;
-			cout << "Ââåäèòå äàòó: ";
+			cout << "Введите дату: ";
 			cin >> key;
 			int key_int = strKey_to_intKey(key);
 
 			if (InterpolSearch(new_arr, key_int, random) != -1)
 			{
-				cout << "\nÏðåäñòàâëÿþ ñâîä äàííûõ î ëþäÿõ ñ çàäàííûì Âàìè ïîëåì: \n\n";
+				cout << "\nПредставляю свод данных о людях с заданным Вами полем: \n\n";
 				for (int i = 0; i < random; i++) // Linear Search
 				{
 					if (arr[i].birth_date == key) cout << arr[i] << endl;
 				}
 			}
-			else cout << "Äàííûå î ëþäÿõ ñ çàäàííûì ïîëåì îòñóòñòâóþò!\n";
+			else cout << "Данные о людях с заданным полем отсутствуют!\n";
 			break;
 		}
 		case 3:
 		{
 			string key;
-			cout << "Ââåäèòå äàòó: ";
+			cout << "Введите дату: ";
 			cin >> key;
 			string buffer;
 			for (int i = 0; i < random; i++)
 			{
 				buffer += arr[i].birth_date;
 			}
-			cout << "\nÏðåäñòàâëÿþ ñâîä äàííûõ î ëþäÿõ ñ çàäàííûì Âàìè ïîëåì: \n\n";
-			StraightSearch(buffer,key,arr);
+			cout << "\nПредставляю свод данных о людях с заданным Вами полем: \n\n";
+			StraightSearch(buffer, key, arr);
 			break;
 		}
 		case 4:
 		{
-			cout << "Ââåäèòå äàííûå î ÷åëîâåêå:\n\n1) Äàòà ðîæäåíèÿ: ";
+			cout << "Введите данные о человеке:\n\n1) Дата рождения: ";
 			cin >> arr[random].birth_date;
-			cout << "\n2) Ôàìèëèÿ, èìÿ: ";
+			cout << "\n2) Фамилия, имя: ";
 			cin.get();
 			getline(cin, arr[random].FIO);
-			cout << "\n3) Íîìåð ïàñïîðòà: ";
+			cout << "\n3) Номер паспорта: ";
 			cin >> arr[random].pass_num;
-			
+
 			int cnt = 0;
 			List* now_ptr = head;
 			while (now_ptr->next != nullptr)
@@ -277,7 +274,7 @@ int main()
 			now_ptr = new_elem;
 			now_ptr->next = nullptr;
 			ListPrint(head);
-			
+
 			random++;
 			cout << "random 4. " << random << endl;
 			break;
@@ -288,12 +285,12 @@ int main()
 			{
 				arr[i + 1] = arr[i];
 			}
-			cout << "Ââåäèòå äàííûå î ÷åëîâåêå:\n\n1) Äàòà ðîæäåíèÿ: ";
+			cout << "Введите данные о человеке:\n\n1) Дата рождения: ";
 			cin >> arr[0].birth_date;
-			cout << "\n2) Ôàìèëèÿ, èìÿ: ";
+			cout << "\n2) Фамилия, имя: ";
 			cin.get();
 			getline(cin, arr[0].FIO);
-			cout << "\n3) Íîìåð ïàñïîðòà: ";
+			cout << "\n3) Номер паспорта: ";
 			cin >> arr[0].pass_num;
 
 			List* new_elem = new List;
@@ -310,12 +307,12 @@ int main()
 		}
 		case 6:
 		{
-			cout << "Ââåäèòå ïîçèöèþ â ÁÄ, êóäà âñòàâèòü íîâûå äàííûå î ÷åëîâåêå: ";
+			cout << "Введите позицию в БД, куда вставить новые данные о человеке: ";
 			int pos;
 			cin >> pos;
 			while (pos < 1 || pos > random)
 			{
-				cout << "\nÒàêîãî íîìåðà â ÁÄ íåò! Ââåäèòå ïîçèöèþ çàíîâî: ";
+				cout << "\nТакого номера в БД нет! Введите позицию заново: ";
 				cin >> pos;
 				cout << "\n";
 			}
@@ -323,13 +320,13 @@ int main()
 			{
 				arr[i + 1] = arr[i];
 			}
-			cout << "Ââåäèòå äàííûå î ÷åëîâåêå:\n\n1) Äàòà ðîæäåíèÿ: ";
-			cin >> arr[pos-1].birth_date;
-			cout << "\n2) Ôàìèëèÿ, èìÿ: ";
+			cout << "Введите данные о человеке:\n\n1) Дата рождения: ";
+			cin >> arr[pos - 1].birth_date;
+			cout << "\n2) Фамилия, имя: ";
 			cin.get();
-			getline(cin, arr[pos-1].FIO);
-			cout << "\n3) Íîìåð ïàñïîðòà: ";
-			cin >> arr[pos-1].pass_num;
+			getline(cin, arr[pos - 1].FIO);
+			cout << "\n3) Номер паспорта: ";
+			cin >> arr[pos - 1].pass_num;
 
 			int cnt = 0;
 			List* now_ptr = head;
@@ -339,9 +336,9 @@ int main()
 				if (cnt == pos - 1)
 				{
 					List* new_elem = new List;
-					new_elem->object.birth_date = arr[pos-1].birth_date;
-					new_elem->object.FIO = arr[pos-1].FIO;
-					new_elem->object.pass_num = arr[pos-1].pass_num;
+					new_elem->object.birth_date = arr[pos - 1].birth_date;
+					new_elem->object.FIO = arr[pos - 1].FIO;
+					new_elem->object.pass_num = arr[pos - 1].pass_num;
 					prenow_ptr->next = new_elem;
 					new_elem->next = now_ptr;
 					break;
@@ -358,21 +355,21 @@ int main()
 		}
 		case 7:
 		{
-			new_arr = new DataBase[10];
+			new_arr = new DataBase[MAX];
 			for (int i = 0; i < random; i++)
 			{
 				new_arr[i] = arr[i];
 				cout << "new_arr[i] 7. =  " << new_arr[i] << endl;
 			}
 			random_help = random;
-			
+
 			cout << "random help " << random_help << endl;
 
-			int cnt = 0;
+			cnt = 0;
 			while (cnt <= random / 2)
 			{
 				int for_del;
-				cout << "Ââåäèòå íîìåð äàííûõ äëÿ óäàëåíèÿ: ";
+				cout << "Введите номер данных для удаления: ";
 				cin >> for_del;
 				List* now_ptr = head;
 				int index = 0;
@@ -390,7 +387,7 @@ int main()
 				}
 			}
 			random -= cnt;
-			cout << "rand_help 7.(êîíåö) = " << random_help << endl;
+			cout << "rand_help 7.(конец) = " << random_help << endl;
 			List* now_ptr = head;
 			while (now_ptr != nullptr)
 			{
@@ -399,7 +396,7 @@ int main()
 			}
 
 			delete[] arr;
-			arr = new DataBase[10];
+			arr = new DataBase[MAX];
 			now_ptr = head;
 			int i = 0;
 			while (now_ptr != nullptr)
@@ -410,14 +407,14 @@ int main()
 					i++;
 				}
 				now_ptr = now_ptr->next;
-				
+
 			}
-			cout << "rand_help 7.(êîíåö) = " << random_help << endl;
+			cout << "rand_help 7.(конец) = " << random_help << endl;
 			Print(arr, random);
 			ListDelete(head);
 			ListFill(head, arr, random);
 			cout << endl;
-			
+
 
 			break;
 		}
@@ -430,8 +427,8 @@ int main()
 				cout << "new_arr[i] 8. = " << new_arr[i] << endl;
 			}
 			delete[] arr;
-			arr = new DataBase[10];
-			for (int i = 0; i < random_help;i++)
+			arr = new DataBase[MAX];
+			for (int i = 0; i < random_help; i++)
 			{
 				arr[i] = new_arr[i];
 			}
@@ -439,15 +436,45 @@ int main()
 			random = random_help;
 			break;
 		}
-		default: cout << "Òàêîãî ïóíêòà íåò!\n";
+		/*case 9:
+		{
+			file.clear();
+			ofstream file;
+			file.open("Changes.txt");
+			for (int i = 0; i < random-cnt; i++)
+			{
+				file.write((char*)&arr[i], sizeof(arr[i]));
+			}
+			cout << random << " = random \n";
+			file.close();
+			break;
+		}*/
+		/*case 10:
+		{
+			cout << "Выгружаю сохраненные изменения БД:\n\n";
+			delete[] arr;
+			arr = new DataBase[10];
+			ifstream file;
+			file.open("Changes.txt", ifstream::app);
+			DataBase object;
+			int i = 0;
+			while (file.read((char*)&object, sizeof(DataBase)))
+			{
+				arr[i] = object;
+				i++;
+			}
+			
+			file.close();
+			break;
+		}*/
+		default: cout << "Такого пункта нет!\n";
 		}
 		
-		cout << "\n\nÏðîäîëæèòü? äà/íåò: ";
+		cout << "\n\nПродолжить? да/нет: ";
 		cin >> close;
-		if (close == "äà") continue;
+		if (close == "да") continue;
 	}
-
-	// Â ðàçðàáîòêå!
+	// В разработке!
 	
 
 	return 0;
