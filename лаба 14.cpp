@@ -60,35 +60,8 @@ void random_FIO(DataBase& arr)
 	}
 }
 
-void InsertSort(int* arr, int Len)
-{
-	for (int i = 1; i < Len; i++)
-	{
-		int k = i;
-		while (k > 0 && arr[k] < arr[k - 1])
-		{
-			int buff = arr[k - 1];
-			arr[k - 1] = arr[k];
-			arr[k] = buff;
-			k--;
-		}
-	}
-}
 
-int InterpolSearch(int* arr, int key, int Len)
-{
-	InsertSort(arr, Len);
-	int mid, left = 0, right = Len - 1;
-	while (arr[left] <= key && arr[right] >= key)
-	{
-		mid = left + ((key - arr[left]) * (right - left)) / (arr[right] - arr[left]);
-		if (arr[mid] < key) left = mid + 1;
-		else if (arr[mid] > key) right = mid - 1;
-		else return mid;
-	}
-	if (arr[left] == key) return left;
-	else return -1;
-}
+
 
 int* strDates_to_intDates(DataBase* arr, int Len)
 {
@@ -116,22 +89,7 @@ int strKey_to_intKey(string key)
 	return key_int;
 }
 
-void StraightSearch(string str, string patt, DataBase* arr)
-{
-	for (int i = 0; i < str.size(); i++)
-	{
-		int i_helper = i;
-		for (int j = 0; j < patt.size(); j++)
-		{
-			if (str[i_helper] != patt[j]) break;
-			else if (j == patt.size() - 1)
-			{
-				cout << arr[i / 10] << endl;
-			}
-			i_helper++;
-		}
-	}
-}
+
 
 void ListFill(List*& head, DataBase* arr, int Len)
 {
