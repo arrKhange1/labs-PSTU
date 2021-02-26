@@ -241,6 +241,52 @@ vector<int> KMP(string str, string sub, int* br) {
 
 }
 
+int BoyerandMurr(string txt, string pat, DataBase*arr)
+{
+	int sourcelen = txt.length();
+	int templen = pat.length();
+	int offset_table[256];
+	for (int i = 0; i <= 255; i++)
+	{
+		offset_table[i] = templen;
+	}
+
+	for (int i = 0; i < templen - 1; i++)
+	{
+		offset_table[(int)pat[i]] = templen - i - 1;
+	}
+
+	int i = templen - 1;
+	int j = i;
+	int k = i;
+	int cnt = 0;
+	while (i <= sourcelen - 1)
+	{
+		j = templen - 1;
+		k = i;
+		while (j >= 0 && txt[k] == pat[j])
+		{
+			k--;
+			j--;
+			cnt++;
+		}
+		if (j == -1)  cout << arr[(k + 1) / 10] << endl;
+		if (i == templen - 1 && j == -1)
+		{
+			i++;
+		}
+		else if (j == -1) i++;
+		else i += offset_table[(int)txt[k]] - cnt;
+		cnt = 0;
+	}
+	if (j != -1) return -1;
+	
+
+
+
+
+}
+
 int main()
 {
 	SetConsoleCP(1251);
@@ -256,8 +302,9 @@ int main()
 		random_FIO(arr[i]);
 		arr[i].pass_num = rand() % 900000 + 100000;
 	}
-	arr[3].birth_date = "09.06.2020";
 	arr[0].birth_date = "09.06.2020";
+	arr[3].birth_date = "09.06.2020";
+	arr[1].birth_date = "09.06.2020";
 
 	List* head = nullptr;
 	ListFill(head, arr, random);
@@ -267,14 +314,14 @@ int main()
 	int random_help = random;
 	int cnt = 0;
 	string close;
-	while (close != "ÌÂÚ")  // Menu
+	while (close != "√≠√•√≤")  // Menu
 	{
 		cout << endl;
-		cout << "ÃÂÌ˛\n\n";
-		cout << "1. œÓÍ‡Á‡Ú¸ ¡‡ÁÛ ƒ‡ÌÌ˚ı\n2. Õ‡ÈÚË Î˛‰ÂÈ ÔÓ ‰‡ÚÂ ÓÊ‰ÂÌËˇ Ò ÔÓÏÓ˘¸˛  Ãœ\n3. Õ‡ÈÚË Î˛‰ÂÈ ÔÓ ‰‡ÚÂ ÓÊ‰ÂÌËˇ Ò ÔÓÏÓ˘¸˛ œˇÏÓ„Ó ÔÓËÒÍ‡\n4. ƒÓ·‡‚ËÚ¸ ‰‡ÌÌ˚Â Ó ˜ÂÎÓ‚ÂÍÂ ‚ ÍÓÌÂˆ ¡ƒ\n";
-		cout << "5. ƒÓ·‡‚ËÚ¸ ‰‡ÌÌ˚Â Ó ˜ÂÎÓ‚ÂÍÂ ‚ Ì‡˜‡ÎÓ ¡ƒ\n6. ƒÓ·‡‚ËÚ¸ ‰‡ÌÌ˚Â Ó ˜ÂÎÓ‚ÂÍÂ Ì‡ Á‡‰‡ÌÌÓÂ ÏÂÒÚÓ ‚ ¡ƒ\n7. ”‰‡ÎˇÚ¸, ÔÓÍ‡ ÌÂ ÔÂ‚˚ÒËÚ ÔÓÎÓ‚ËÌÛ ¡ƒ\n8. ŒÚÏÂÌËÚ¸ ÔÓÒÎÂ‰ÌÂÂ Û‰‡ÎÂÌËÂ\n";
+		cout << "√å√•√≠√æ\n\n";
+		cout << "1. √è√Æ√™√†√ß√†√≤√º √Å√†√ß√≥ √Ñ√†√≠√≠√ª√µ\n2. √ç√†√©√≤√® √´√æ√§√•√© √Ø√Æ √§√†√≤√• √∞√Æ√¶√§√•√≠√®√ø √± √Ø√Æ√¨√Æ√π√º√æ √ä√å√è\n3. √ç√†√©√≤√® √´√æ√§√•√© √Ø√Æ √§√†√≤√• √∞√Æ√¶√§√•√≠√®√ø √± √Ø√Æ√¨√Æ√π√º√æ √è√∞√ø√¨√Æ√£√Æ √Ø√Æ√®√±√™√†\n4. √Ñ√Æ√°√†√¢√®√≤√º √§√†√≠√≠√ª√• √Æ √∑√•√´√Æ√¢√•√™√• √¢ √™√Æ√≠√•√∂ √Å√Ñ\n";
+		cout << "5. √Ñ√Æ√°√†√¢√®√≤√º √§√†√≠√≠√ª√• √Æ √∑√•√´√Æ√¢√•√™√• √¢ √≠√†√∑√†√´√Æ √Å√Ñ\n6. √Ñ√Æ√°√†√¢√®√≤√º √§√†√≠√≠√ª√• √Æ √∑√•√´√Æ√¢√•√™√• √≠√† √ß√†√§√†√≠√≠√Æ√• √¨√•√±√≤√Æ √¢ √Å√Ñ\n7. √ì√§√†√´√ø√≤√º, √Ø√Æ√™√† √≠√• √Ø√∞√•√¢√ª√±√®√≤ √Ø√Æ√´√Æ√¢√®√≠√≥ √Å√Ñ\n8. √é√≤√¨√•√≠√®√≤√º √Ø√Æ√±√´√•√§√≠√•√• √≥√§√†√´√•√≠√®√•\n";
 		int choice;
-		cout << "\n¬‚Ó‰ËÚÂ ÔÛÌÍÚ: ";
+		cout << "\n√Ç√¢√Æ√§√®√≤√• √Ø√≥√≠√™√≤: ";
 		cin >> choice;
 		cout << "\n\n";
 
@@ -288,7 +335,7 @@ int main()
 		case 2:
 		{
 			string key;
-			cout << "¬‚Â‰ËÚÂ ‰‡ÚÛ: ";
+			cout << "√Ç√¢√•√§√®√≤√• √§√†√≤√≥: ";
 			cin >> key;
 			string buffer;
 			for (int i = 0; i < random; i++)
@@ -300,35 +347,35 @@ int main()
 
 			a = KMP(buffer, key, max_border_array(key));
 			for (vector<int>::iterator it = a.begin(); it != a.end(); ++it)
-				cout << endl << arr[*it/10] << endl;
+				cout << endl << arr[*it / 10] << endl;
 
-			
 
-			
+
+
 			break;
 		}
 		case 3:
 		{
 			string key;
-			cout << "¬‚Â‰ËÚÂ ‰‡ÚÛ: ";
+			cout << "√Ç√¢√•√§√®√≤√• √§√†√≤√≥: ";
 			cin >> key;
 			string buffer;
 			for (int i = 0; i < random; i++)
 			{
 				buffer += arr[i].birth_date;
 			}
-			cout << "\nœÂ‰ÒÚ‡‚Îˇ˛ Ò‚Ó‰ ‰‡ÌÌ˚ı Ó Î˛‰ˇı Ò Á‡‰‡ÌÌ˚Ï ¬‡ÏË ÔÓÎÂÏ: \n\n";
-			StraightSearch(buffer, key, arr);
+			cout << "\n√è√∞√•√§√±√≤√†√¢√´√ø√æ √±√¢√Æ√§ √§√†√≠√≠√ª√µ √Æ √´√æ√§√ø√µ √± √ß√†√§√†√≠√≠√ª√¨ √Ç√†√¨√® √Ø√Æ√´√•√¨: \n\n";
+			BoyerandMurr(buffer, key, arr);
 			break;
 		}
 		case 4:
 		{
-			cout << "¬‚Â‰ËÚÂ ‰‡ÌÌ˚Â Ó ˜ÂÎÓ‚ÂÍÂ:\n\n1) ƒ‡Ú‡ ÓÊ‰ÂÌËˇ: ";
+			cout << "√Ç√¢√•√§√®√≤√• √§√†√≠√≠√ª√• √Æ √∑√•√´√Æ√¢√•√™√•:\n\n1) √Ñ√†√≤√† √∞√Æ√¶√§√•√≠√®√ø: ";
 			cin >> arr[random].birth_date;
-			cout << "\n2) ‘‡ÏËÎËˇ, ËÏˇ: ";
+			cout << "\n2) √î√†√¨√®√´√®√ø, √®√¨√ø: ";
 			cin.get();
 			getline(cin, arr[random].FIO);
-			cout << "\n3) ÕÓÏÂ Ô‡ÒÔÓÚ‡: ";
+			cout << "\n3) √ç√Æ√¨√•√∞ √Ø√†√±√Ø√Æ√∞√≤√†: ";
 			cin >> arr[random].pass_num;
 
 			int cnt = 0;
@@ -355,12 +402,12 @@ int main()
 			{
 				arr[i + 1] = arr[i];
 			}
-			cout << "¬‚Â‰ËÚÂ ‰‡ÌÌ˚Â Ó ˜ÂÎÓ‚ÂÍÂ:\n\n1) ƒ‡Ú‡ ÓÊ‰ÂÌËˇ: ";
+			cout << "√Ç√¢√•√§√®√≤√• √§√†√≠√≠√ª√• √Æ √∑√•√´√Æ√¢√•√™√•:\n\n1) √Ñ√†√≤√† √∞√Æ√¶√§√•√≠√®√ø: ";
 			cin >> arr[0].birth_date;
-			cout << "\n2) ‘‡ÏËÎËˇ, ËÏˇ: ";
+			cout << "\n2) √î√†√¨√®√´√®√ø, √®√¨√ø: ";
 			cin.get();
 			getline(cin, arr[0].FIO);
-			cout << "\n3) ÕÓÏÂ Ô‡ÒÔÓÚ‡: ";
+			cout << "\n3) √ç√Æ√¨√•√∞ √Ø√†√±√Ø√Æ√∞√≤√†: ";
 			cin >> arr[0].pass_num;
 
 			List* new_elem = new List;
@@ -377,12 +424,12 @@ int main()
 		}
 		case 6:
 		{
-			cout << "¬‚Â‰ËÚÂ ÔÓÁËˆË˛ ‚ ¡ƒ, ÍÛ‰‡ ‚ÒÚ‡‚ËÚ¸ ÌÓ‚˚Â ‰‡ÌÌ˚Â Ó ˜ÂÎÓ‚ÂÍÂ: ";
+			cout << "√Ç√¢√•√§√®√≤√• √Ø√Æ√ß√®√∂√®√æ √¢ √Å√Ñ, √™√≥√§√† √¢√±√≤√†√¢√®√≤√º √≠√Æ√¢√ª√• √§√†√≠√≠√ª√• √Æ √∑√•√´√Æ√¢√•√™√•: ";
 			int pos;
 			cin >> pos;
 			while (pos < 1 || pos > random)
 			{
-				cout << "\n“‡ÍÓ„Ó ÌÓÏÂ‡ ‚ ¡ƒ ÌÂÚ! ¬‚Â‰ËÚÂ ÔÓÁËˆË˛ Á‡ÌÓ‚Ó: ";
+				cout << "\n√í√†√™√Æ√£√Æ √≠√Æ√¨√•√∞√† √¢ √Å√Ñ √≠√•√≤! √Ç√¢√•√§√®√≤√• √Ø√Æ√ß√®√∂√®√æ √ß√†√≠√Æ√¢√Æ: ";
 				cin >> pos;
 				cout << "\n";
 			}
@@ -390,12 +437,12 @@ int main()
 			{
 				arr[i + 1] = arr[i];
 			}
-			cout << "¬‚Â‰ËÚÂ ‰‡ÌÌ˚Â Ó ˜ÂÎÓ‚ÂÍÂ:\n\n1) ƒ‡Ú‡ ÓÊ‰ÂÌËˇ: ";
+			cout << "√Ç√¢√•√§√®√≤√• √§√†√≠√≠√ª√• √Æ √∑√•√´√Æ√¢√•√™√•:\n\n1) √Ñ√†√≤√† √∞√Æ√¶√§√•√≠√®√ø: ";
 			cin >> arr[pos - 1].birth_date;
-			cout << "\n2) ‘‡ÏËÎËˇ, ËÏˇ: ";
+			cout << "\n2) √î√†√¨√®√´√®√ø, √®√¨√ø: ";
 			cin.get();
 			getline(cin, arr[pos - 1].FIO);
-			cout << "\n3) ÕÓÏÂ Ô‡ÒÔÓÚ‡: ";
+			cout << "\n3) √ç√Æ√¨√•√∞ √Ø√†√±√Ø√Æ√∞√≤√†: ";
 			cin >> arr[pos - 1].pass_num;
 
 			int cnt = 0;
@@ -437,7 +484,7 @@ int main()
 			while (cnt <= random / 2)
 			{
 				int for_del;
-				cout << "¬‚Â‰ËÚÂ ÌÓÏÂ ‰‡ÌÌ˚ı ‰Îˇ Û‰‡ÎÂÌËˇ: ";
+				cout << "√Ç√¢√•√§√®√≤√• √≠√Æ√¨√•√∞ √§√†√≠√≠√ª√µ √§√´√ø √≥√§√†√´√•√≠√®√ø: ";
 				cin >> for_del;
 				List* now_ptr = head;
 				int index = 0;
@@ -503,12 +550,12 @@ int main()
 			break;
 		}
 
-		default: cout << "“‡ÍÓ„Ó ÔÛÌÍÚ‡ ÌÂÚ!\n";
+		default: cout << "√í√†√™√Æ√£√Æ √Ø√≥√≠√™√≤√† √≠√•√≤!\n";
 		}
 
-		cout << "\n\nœÓ‰ÓÎÊËÚ¸? ‰‡/ÌÂÚ: ";
+		cout << "\n\n√è√∞√Æ√§√Æ√´√¶√®√≤√º? √§√†/√≠√•√≤: ";
 		cin >> close;
-		if (close == "‰‡") continue;
+		if (close == "√§√†") continue;
 	}
 
 
