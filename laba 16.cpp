@@ -1,157 +1,353 @@
 #include <iostream>
 #include <ctime>
+#include <vector>
 using namespace std;
 
-void mergeSortNaturalMain(int* v, int r, int t)
+vector<int> CreateVector(int size = 10)
 {
-	int p = 1;
-	int k = 1;
-	int i = 0;
-	bool flag = false;
-	while (v[i] <= v[i + 1] && i < r - 1)
+	if (size < 2) size = 10;
+	srand(time(0));
+	vector<int> res;
+	for (int i = 0; i < size; i++)
 	{
-		p++;
-		i++;
+		res.push_back(-100 + rand() % 200);
 	}
-	if (v[i] > v[i + 1] && i < r - 1)
+	return res;
+}
+
+void PrintVector(vector<int> vec)
+{
+	for (int i = 0; i < vec.size(); i++)
+		cout << vec[i] << " ";
+	cout << endl;
+}
+
+void PrintSeries(vector<vector<int>> series)
+{
+	cout << series.size() << " - размер серии  ";
+	for (int i = 0; i < series.size(); i++)
 	{
-		i++;
-		flag = true;
-		while (v[i] <= v[i + 1] && i < r - 1)
+		cout << "(";
+		for (int j = 0; j < series[i].size(); j++)
 		{
-			k++;
+			cout << series[i][j] << " ";
+		}
+		cout << ")";
+	}
+	cout << endl;
+}
+
+
+vector<int> MergeSeries(vector<int> ser1, vector<int> ser2)
+{
+	int i = 0, j = 0;
+	vector<int> res;
+	while (i < ser1.size() || j < ser2.size())
+	{
+		while (i < ser1.size() && (j == ser2.size() || ser1[i] <= ser2[j]))
+		{
+			res.push_back(ser1[i]);
 			i++;
 		}
-	}
-	int num = i + 1;
-	int* a = new int[p];
-	int* b = new int[k];
-	
-	for (i = 0; i < p; ++i)
-	{
-		a[i] = v[i];
-	}
-
-	int g = 0;
-	if (flag == true)
-	{
-		for (i = p; i < p + k; ++i)
+		while (j < ser2.size() && (i == ser1.size() || ser2[j] <= ser1[i]))
 		{
-			b[g] = v[i];
-			g++;
+			res.push_back(ser2[j]);
+			j++;
 		}
 	}
+	return res;
+}
 
-	int j = 0;
-	int l = 0;
 
-	if (flag == true)
+vector<vector<int>> SplitToSeries(vector<int> vec)
+{
+	int i = 0;
+	vector<vector<int>> res;
+	while (i < vec.size())
 	{
-		for (i = 0; i < num; ++i)
-		{
-			if ((a[l] < b[j] || j >= k) && l < p)
-			{
-				v[i] = a[l];
-				l++;
-			}
-			else if ((a[l] > b[j] || l >= p) && j < k)
-			{
-				v[i] = b[j];
-				j++;
-			}
-			else if (a[l] == b[j] && j < k && l < p)
-			{
-				v[i] == a[l];
-				v[i + 1] = b[j];
-				l++;
-				j++;
-				i++;
-			}
+		vector<int> newSerie;
+		newSerie.push_back(vec[i]);
+		i++;
 
+		while (i < vec.size() && vec[i - 1] < vec[i])
+		{
+			newSerie.push_back(vec[i]);
+			i++;
 		}
+
+		res.push_back(newSerie);
 	}
-	delete[] a;
-	delete[] b;
+	return res;
 }
 
-void mergeSortNatural(int* v, int r, int i)
+// natural
+
+vector<int> NaturalMergeSort(vector<int> vec)
 {
-	if (i < r)
+	vector<vector<int>> series = SplitToSeries(vec);
+	PrintSeries(series);
+
+	while (series.size() > 1)
 	{
-		mergeSortNaturalMain(v, r, i);
-		mergeSortNatural(v, r, i + 1);
+		series.push_back(MergeSeries(series[0], series[1]));
+		series.erase(series.begin(), series.begin() + 2);
+		PrintSeries(series);
 	}
+
+	return series[0];
 }
- 
-void mergeSortBalancedMain(int* A, int first, int last)
+
+// balanced
+
+vector<vector<int>> SplitToBalancedSeries(vector<int> vec)
 {
-	int middle, start, final, j;
-	int* mas = new int[100];
-	middle = (first + last) / 2;
-	start = first;
-	final = middle + 1;
-	for (j = first; j <= last; ++j)
+	vector<vector<int>> series;
+	series.push_back(vec);
+	PrintSeries(series);
+
+	bool isVectorNeedToSplit = true;
+	while (isVectorNeedToSplit)
 	{
-		if ((start <= middle) && ((final > last) || (A[start] < A[final])))
+		isVectorNeedToSplit = false;
+		vector<vector<int>> newSeries;
+		for (int i = 0; i < series.size(); i++)
 		{
-			mas[j] = A[start];
-			start++;
+			if (series[i].size() > 2)
+			{
+				isVectorNeedToSplit = true;
+				vector<int> newSerie1, newSerie2;
+				int j = 0;
+
+				while (series[i].size() % 2 == 0 && j < series[i].size() / 2 || series[i].size() % 2 != 0 && j < series[i].size() / 2 + 1)
+				{
+					newSerie1.push_back(series[i][j]);
+					if (j < series[i].size() / 2)
+					{
+						newSerie2.insert(newSerie2.begin(), series[i][series[i].size() - 1 - j]);
+					}
+					j++;
+				}
+
+				newSeries.push_back(newSerie1);
+				newSeries.push_back(newSerie2);
+			}
+			else if (series[i].size() == 2)
+			{
+				if (series[i][0] > series[i][1])
+				{
+					auto t = series[i][0];
+					series[i][0] = series[i][1];
+					series[i][1] = t;
+				}
+
+				newSeries.push_back(series[i]);
+			}
+			else
+			{
+				newSeries.push_back(series[i]);
+			}
+		}
+		series = newSeries;
+		PrintSeries(series);
+	}
+
+	return series;
+}
+
+vector<int> BalancedMergeSort(vector<int> vec)
+{
+	cout << "Деление" << endl;
+	vector<vector<int>> series = SplitToBalancedSeries(vec);
+	cout << "Слияние" << endl;
+	PrintSeries(series);
+
+	vector<vector<int>> newSeries;
+	for (int i = series.size() - 1; i > 0; i--)
+	{
+		if (series[i].size() == 1)
+		{
+			newSeries.insert(newSeries.begin(), MergeSeries(series[i], series[i - 1]));
+			i--;
 		}
 		else
 		{
-			mas[j] = A[final];
-			final++;
+			newSeries.insert(newSeries.begin(), series[i]);
 		}
-		
 	}
-	for (j = first; j <= last; ++j) A[j] = mas[j];
-	delete[] mas;
-}
 
-void mergeSortBalanced(int* A, int first, int last)
-{
-	if (first < last)
+	series = newSeries;
+	PrintSeries(series);
+
+	newSeries.clear();
+	while (series.size() > 1)
 	{
-		mergeSortBalanced(A, first, (first + last) / 2);
-		mergeSortBalanced(A, (first + last) / 2 +1, last);
-		mergeSortBalancedMain(A, first, last);
+		newSeries.clear();
+		for (int i = 0; i < series.size(); i += 2)
+		{
+			newSeries.push_back(MergeSeries(series[i], series[i + 1]));
+		}
+		series = newSeries;
+		PrintSeries(series);
+	}
 
+	return series[0];
+}
+
+//mnogofaz
+
+void PrintFiles(vector<vector<int>> f1, vector<vector<int>> f2, vector<vector<int>>f3)
+{
+	cout << "F1 : ";
+	PrintSeries(f1);
+	cout << "F2 : ";
+	PrintSeries(f2);
+	cout << "F3 : ";
+	PrintSeries(f3);
+	cout << endl;
+}
+
+vector<int> DeleteEmptyElements(vector<int> vec)
+{
+	for (int i = vec.size() - 1; i >= 0; i--)
+		if (vec[i] == INT32_MAX)
+			vec.erase(vec.begin() + i);
+	return vec;
+}
+
+// fibbonachi dlya raspr. serii po files
+void Fibbonachi(int numberOfSeries, int& size1, int& size2)
+{
+	size1 = 0;
+	size2 = 1;
+	while (size1 + size2 < numberOfSeries)
+	{
+		cout << "\n" << size1 << " " << size2 << " " << numberOfSeries << endl;
+		int t = size2;
+		size2 = size2 + size1;
+		size1 = t;
 	}
 }
 
+vector<vector<int>> SplitToEqualSeries(vector<int> vec)
+{
+	int numberOfElements = 2;
+	while (vec.size() % numberOfElements != 0 && numberOfElements < 1000) numberOfElements++;
+
+	vector<vector<int>> res;
+	for (int i = 0; i < vec.size() / numberOfElements; i++)
+	{
+		vector<int> newSerie;
+		for (int j = 0; j < numberOfElements; j++)
+		{
+			newSerie.push_back(vec[i * numberOfElements + j]);
+		}
+		res.push_back(newSerie);
+	}
+
+	return res;
+}
+
+vector<vector<int>> MergeFiles(vector<vector<int>>& f1, vector<vector<int>>& f2)
+{
+	vector<vector<int>> res;
+	int min = f1.size() < f2.size() ? f1.size() : f2.size();
+	for (int i = 0; i < min; i++)
+	{
+		res.push_back(MergeSeries(f1[i], f2[i]));
+	}
+
+	f1.erase(f1.begin(), f1.begin() + min);
+	f2.erase(f2.begin(), f2.begin() + min);
+
+	return res;
+}
+
+vector<int> PolyphaseMergeSort(vector<int> vec)
+{
+	vector<vector<int>> series = SplitToEqualSeries(vec);
+	int size1, size2;
+	Fibbonachi(series.size(), size1, size2);
+	vector<vector<int>> F1, F2, F3;
+
+	cout << "Разделение на равные серии" << endl;
+	PrintSeries(series);
+
+	for (int i = 0; i < size1; i++)
+	{
+		F1.push_back(series[i]);
+	}
+	for (int i = size1; i < series.size(); i++)
+	{
+		F2.push_back(series[i]);
+	}
+	for (int i = series.size(); i < size1 + size2; i++)
+	{
+		vector<int> serie;
+		for (int j = 0; j < F2[0].size(); j++)
+			serie.push_back(INT32_MAX);
+		F2.push_back(serie);
+	}
+
+	cout << "Разделение серий на файлы F1 и F2 (" << size1 << " " << size2 << ")" << endl;
+	PrintFiles(F1, F2, F3);
+
+	cout << "Сортировка элементов внутри файлов" << endl;
+	for (int i = 0; i < F1.size(); i++)
+	{
+		F1[i] = NaturalMergeSort(F1[i]);
+	}
+	for (int i = 0; i < F2.size(); i++)
+	{
+		F2[i] = NaturalMergeSort(F2[i]);
+	}
+	PrintFiles(F1, F2, F3);
+
+	cout << "Слияние файлов" << endl;
+	int countEmptyFiles = 1;
+
+	while (countEmptyFiles < 2)
+	{
+		int indOfEmptyFile = 1;
+		if (F2.size() == 0) indOfEmptyFile = 2;
+		if (F3.size() == 0) indOfEmptyFile = 3;
+
+		switch (indOfEmptyFile)
+		{
+		case 1: F1 = MergeFiles(F2, F3); break;
+		case 2: F2 = MergeFiles(F1, F3); break;
+		case 3: F3 = MergeFiles(F1, F2); break;
+		}
+
+		countEmptyFiles = 0;
+		if (F1.size() == 0) countEmptyFiles++;
+		if (F2.size() == 0) countEmptyFiles++;
+		if (F3.size() == 0) countEmptyFiles++;
+
+		PrintFiles(F1, F2, F3);
+	}
+
+	if (F1.size() != 0) return DeleteEmptyElements(F1[0]);
+	if (F2.size() != 0) return DeleteEmptyElements(F2[0]);
+	return DeleteEmptyElements(F3[0]);
+}
 
 int main()
 {
-	cout << "give a size of an array to sort it in the increasing way: ";
-	int size;
-	cin >> size;
-	cout << endl;
-	
-	int* arr = new int[10];
-	
-	srand(time(NULL));
-	
-	setlocale(LC_ALL, "Rus");
-	
-	for (int i = 0; i < 10; ++i)
-	{
-		arr[i] = size-1 - i;
-		cout << arr[i] << " ";
-	}
-	cout << "\n\n";
-	
-	cout << "choose a type of sorting:\n\n1. mergeSortNatural\n2. mergeSortBalanced\n\n";
-	int choice;
-	cin >> choice;
-	cout << endl;
-	if (choice == 1) mergeSortNatural(arr, 10, 0);
-	else if (choice == 2) mergeSortBalanced(arr, 0, size - 1);
-	
-	for (int i = 0; i < 10; ++i)
-	{
-		cout << arr[i] << " ";
-	}
-	
+	setlocale(LC_ALL, "Russian");
 
-	return 0;
+	cout << "Исходный вектор" << endl;
+	vector<int> vec = CreateVector();
+	PrintVector(vec);
+
+	cout << endl << "Сортировка методом естественного слияния" << endl;
+	vector<int> vec1 = NaturalMergeSort(vec);
+	PrintVector(vec1);
+
+	cout << endl << "Сортировка методом сбалансированного слияния" << endl;
+	vector<int> vec2 = BalancedMergeSort(vec);
+	PrintVector(vec2);
+
+	cout << endl << "Сортировка методом многофазного слияния" << endl;
+	vector<int> vec3 = PolyphaseMergeSort(vec);
+	PrintVector(vec3);
 }
