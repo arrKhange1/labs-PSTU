@@ -135,3 +135,39 @@ private:
 };
 
 ////
+
+class Iterator
+{
+	friend class Set;
+public:
+	Iterator();
+	Iterator(const Iterator&);
+	void operator --();
+	void operator ++();
+	int operator *();
+	bool operator !=(const Iterator&);
+private:
+	int* elem_ptr;
+};
+
+class Set
+{
+	friend ostream& operator << (ostream& out, Set& obj);
+public:
+	Iterator begin();
+	Iterator finish();
+	Set();
+	~Set();
+	Set(int);
+	Set(const Set&);
+	int& operator [](int);
+	Set& operator = (const Set& obj);
+	int operator ()();
+	Set operator - (const Set&);
+
+private:
+	int size;
+	int* arr;
+	Iterator first;
+	Iterator end;
+};
