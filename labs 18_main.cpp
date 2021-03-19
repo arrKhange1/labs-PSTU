@@ -1,4 +1,4 @@
-﻿// ConsoleApplication1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+// ConsoleApplication1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
 #include <iostream>
@@ -141,6 +141,21 @@ ostream& operator << (ostream& out, Vector& obj)
 }
 //
 
+// for lab 18.6
+ostream& operator << (ostream& out, Set& obj)
+{
+    if (obj.arr != nullptr)
+    {
+        for (int i = 0; i < obj.size; ++i)
+        {
+            out << obj.arr[i] << " ";
+        }
+        cout << endl;
+    }
+    return out;
+}
+//
+
 int main()
 {
     srand(time(NULL));
@@ -150,7 +165,7 @@ int main()
     while (go)
     {
         cout << "It is the menu! Choose one of the labs below:\n\n";
-        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n\n";
+        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6. Lab 18.6\n\n";
         cin >> choice;
         switch (choice)
         {
@@ -239,7 +254,7 @@ int main()
             cin >> alotta;
             cout << alotta;
 
-            Money much(105120,99);
+            Money much(105120,1);
             cout << much;
             alotta = much--;
             cout << "\nalotta = much--: " << alotta << endl;
@@ -284,6 +299,30 @@ int main()
             break;
         }
         
+        case 6:
+        {
+            Set set1(5);
+            cout << "\nSet1: " << set1 << endl;
+            Set set2(10);
+            cout << "\nSet2: " << set2 << endl;
+            Set set3;
+            set3 = set1 - set2;
+            cout << "\nSet3: " << set3 << endl;
+            cout << "\nSet3[1]: " << set3[1] << endl;
+            set3[1] = 43345455;
+            cout << "\nSet3: " << set3 << endl;
+            cout << "\nLength of Set1: " << set1() << endl;
+            
+            Iterator it = set1.finish();
+            --it;
+            cout << "\n\n*it after --it at Set1: " << *it << "\nSet1 printing with help of Iterator:\n\n";
+      
+            for (Iterator it1 = set1.begin(); it1 != set1.finish(); ++it1) cout << *it1 << " ";
+            cout << "\n\n";
+
+            break;
+        }
+
         default:
         {
             cout << "Such lab doesnt exist! Try again:\n\n";
