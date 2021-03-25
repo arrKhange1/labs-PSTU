@@ -141,20 +141,9 @@ ostream& operator << (ostream& out, Vector& obj)
 }
 //
 
-// for lab 18.6
-ostream& operator << (ostream& out, Set& obj)
-{
-    if (obj.arr != nullptr)
-    {
-        for (int i = 0; i < obj.size; ++i)
-        {
-            out << obj.arr[i] << " ";
-        }
-        cout << endl;
-    }
-    return out;
-}
-//
+ //for lab 18.6
+
+
 
 int main()
 {
@@ -301,23 +290,18 @@ int main()
         
         case 6:
         {
-            Set set1(5);
+            Set<double> set1(5);
             cout << "\nSet1: " << set1 << endl;
-            Set set2(10);
+            Set<double> set2(10);
             cout << "\nSet2: " << set2 << endl;
-            Set set3;
+            Set<double> set3;
             set3 = set1 - set2;
             cout << "\nSet3: " << set3 << endl;
             cout << "\nSet3[1]: " << set3[1] << endl;
-            set3[1] = 43345455;
+            //set3[1] = 43345455;
             cout << "\nSet3: " << set3 << endl;
             cout << "\nLength of Set1: " << set1() << endl;
             
-            Iterator it = set1.finish();
-            --it;
-            cout << "\n\n*it after --it at Set1: " << *it << "\nSet1 printing with help of Iterator:\n\n";
-      
-            for (Iterator it1 = set1.begin(); it1 != set1.finish(); ++it1) cout << *it1 << " ";
             cout << "\n\n";
 
             break;
