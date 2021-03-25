@@ -136,38 +136,122 @@ private:
 
 ////
 
-class Iterator
-{
-	friend class Set;
-public:
-	Iterator();
-	Iterator(const Iterator&);
-	void operator --();
-	void operator ++();
-	int operator *();
-	bool operator !=(const Iterator&);
-private:
-	int* elem_ptr;
-};
+// also for 18.7 (templates)
 
+template<typename T>
 class Set
 {
-	friend ostream& operator << (ostream& out, Set& obj);
 public:
-	Iterator begin();
-	Iterator finish();
+	friend ostream& operator << <T>(ostream& out, const Set<T>&);
 	Set();
 	~Set();
 	Set(int);
-	Set(const Set&);
-	int& operator [](int);
-	Set& operator = (const Set& obj);
+	Set(const Set<T>&);
+	T& operator [](int);
+	Set<T>& operator = (const Set<T>&);
 	int operator ()();
-	Set operator - (const Set&);
-
+	Set<T> operator - (const Set<T>&);
 private:
 	int size;
-	int* arr;
-	Iterator first;
-	Iterator end;
+	T* arr;
 };
+
+// определение методов ШАБЛОННЫХ классов должно быть в одном хедере с объявлением класса
+template<typename T>
+Set<T>::Set()
+{
+	size = 0;
+	arr = nullptr;
+}
+template<typename T>
+Set<T>::Set(int size)
+{
+	this->size = size;
+	arr = new T[size];
+	for (int i = 0; i < size; ++i)
+	{
+		arr[i] = sizeof(arr[i]);
+	}
+}
+template<typename T>
+Set<T>::Set(const Set<T>& obj)
+{
+	this->size = obj.size;
+	arr = new T[size];
+	for (int i = 0; i < size; ++i)
+	{
+		arr[i] = obj.arr[i];
+	}
+}
+template<typename T>
+Set<T>::~Set()
+{
+	delete[] arr;
+	arr = nullptr;
+	size = 0;
+}
+template<typename T>
+T& Set<T>::operator[](int index)
+{
+	if (index < size) return arr[index];
+	else cout << "\nIndex is out of range\n";
+}
+template<typename T>
+int Set<T>::operator()()
+{
+	return size;
+}
+template<class T>
+Set<T>& Set<T>::operator=(const Set<T>& obj)
+{
+	size = obj.size;
+	if (arr != nullptr) delete[] arr;
+	arr = new T[size];
+	for (int i = 0; i < size; ++i)
+	{
+		arr[i] = obj.arr[i];
+	}
+	return *this;
+}
+template<typename T>
+Set<T> Set<T>::operator -(const Set<T>& obj)
+{
+	int res;
+	size > obj.size ? res = size : res = obj.size;
+	Set<T> temp(res);
+	if (obj.arr == nullptr) temp = *this;
+	if (size < obj.size)
+	{
+		for (int i = 0; i < obj.size; ++i)
+		{
+			if (i < size) temp.arr[i] = arr[i] - obj.arr[i];
+			else temp.arr[i] = obj.arr[i];
+		}
+	}
+	else
+	{
+		for (int i = 0; i < size; ++i)
+		{
+			if (i < obj.size || size == obj.size) temp.arr[i] = arr[i] - obj.arr[i];
+			else temp.arr[i] = arr[i];
+		}
+	}
+	return temp;
+}
+
+template <typename T>
+ostream& operator << (ostream& out, const Set<T>& obj)
+{
+	if (obj.arr != nullptr)
+	{
+		for (int i = 0; i < obj.size; ++i)
+		{
+			out << obj.arr[i] << " ";
+		}
+		cout << endl;
+	}
+	return out;
+}
+
+
+//
