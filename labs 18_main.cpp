@@ -154,7 +154,7 @@ int main()
     while (go)
     {
         cout << "It is the menu! Choose one of the labs below:\n\n";
-        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6. Lab 18.6\n\n";
+        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6(7). Lab 18.6\n8. Lab 18.8\n\n";
         cin >> choice;
         switch (choice)
         {
@@ -282,7 +282,7 @@ int main()
             DATE bday(2001, 9, 5);
             cout << bday << "\nbday: " << &bday << endl;
             TRIAD* pntr = &bday;
-            vect.Add(pntr);
+            vect.Add();
             cout << vect;
 
             break;
@@ -290,6 +290,7 @@ int main()
         
         case 6:
         {
+            // also for 18.7
             Set<double> set1(5);
             cout << "\nSet1: " << set1 << endl;
             Set<double> set2(10);
@@ -298,12 +299,20 @@ int main()
             set3 = set1 - set2;
             cout << "\nSet3: " << set3 << endl;
             cout << "\nSet3[1]: " << set3[1] << endl;
-            //set3[1] = 43345455;
+            set3[1] = 43345455;
             cout << "\nSet3: " << set3 << endl;
             cout << "\nLength of Set1: " << set1() << endl;
             
             cout << "\n\n";
 
+            break;
+        }
+
+        case 8:
+        {
+            Dialog EventMenu;
+            EventMenu.Execute();
+            
             break;
         }
 
