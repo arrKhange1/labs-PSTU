@@ -102,6 +102,7 @@ public:
 	TRIAD(int, int, int);
 	virtual void Inc() = 0;
 	virtual void Show() = 0;
+	virtual void First() = 0;
 protected:
 	int first;
 	int second;
@@ -116,6 +117,7 @@ public:
 	DATE(const DATE&);
 	void Inc() override;
 	void Show() override;
+	void First() override;
 	friend istream& operator >> (istream& in, DATE& obj);
 	friend ostream& operator << (ostream& out, DATE& obj);
 };
@@ -126,9 +128,12 @@ public:
 	Vector();
 	~Vector();
 	Vector(int);
-	void Add(TRIAD*);
+	void Add();
+	void Del();
+	void Show();
+	void Year();
 	friend ostream& operator << (ostream& out, Vector& obj);
-private:
+protected:
 	TRIAD** pntr;
 	int curr;
 	int len;
@@ -253,5 +258,46 @@ ostream& operator << (ostream& out, const Set<T>& obj)
 	return out;
 }
 
+
+// lab 18.8
+
+const int evNothing = 0;//пустое событие 
+const int evMessage=100;//непустое событие 
+const int cmAdd=1;//добавить объект в группу 
+const int cmDel=2;//удалить объект из группы
+const int cmYear = 3;//вывести первое поле объектов группы
+const int cmShow=4;//вывести всю группу
+const int cmMake = 6;//создать группу 
+const int cmQuit=101;//выход
+
+struct TEvent
+{
+	int what;
+	union
+	{
+		int command;
+
+		struct
+
+		{
+			int message;
+			int a;
+		};
+	};
+};
+
+class Dialog : public Vector
+{
+public:
+	Dialog(void);
+	virtual void GetEvent(TEvent& event);
+	virtual int Execute();
+	virtual void HandleEvent (TEvent& event); 
+	virtual void ClearEvent (TEvent& event); 
+	int Valid();
+	void EndExec();
+protected:
+	int EndState;
+};
 
 //
