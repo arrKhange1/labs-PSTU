@@ -336,6 +336,11 @@ void DATE::Show()
 	cout << *this << endl;
 }
 
+void DATE::First()
+{
+	cout << endl << this << " Object's first field: " << this->first << endl;
+}
+
 Vector::Vector()
 {
 	pntr = nullptr;
@@ -356,13 +361,168 @@ Vector::Vector(int n)
 	curr = 0;
 }
 
-void Vector::Add(TRIAD* ptr)
+void Vector::Add()
 {
 	if (curr < len)
 	{
+		TRIAD* ptr;
+		DATE* ob = new DATE;
+		cin >> *ob;
+		ptr = ob;
 		pntr[curr++] = ptr;
+	}
+	else cout << "\nVector is already filled\n";
+}
+
+void Vector::Del()
+{
+	if (curr == 0) cout << "\nVector is empty! Nothing to be deleted!\n";
+	else
+	{
+		--curr;
+		cout << "\nThe last object was deleted!\n";
 	}
 }
 
-////
+void Vector::Year()
+{
+	if (curr == 0) cout << "\nVector is empty!\n";
+	else
+	{
+		TRIAD** p = pntr;
+		for (int i = 0; i < curr; ++i)
+		{
+			(*p)->First();
+			++p;
+		}
+	}
+}
 
+void Vector::Show()
+{
+	if (curr == 0) cout << "\nVector is empty\n";
+	TRIAD** p = pntr;
+	for (int i = 0; i < curr; ++i)
+	{
+		(*p)->Show();
+		++p;
+	}
+}
+
+//// lab 18.8
+
+Dialog::Dialog(void) :Vector()
+{
+	EndState = 0;
+}
+
+void Dialog::GetEvent(TEvent& event)
+{
+	string OpInt = "m+-@yq"; 
+	cout << "\nm(with size of a group) - create a group\n+ - add an object\n- - delete an object\n@ - show all\ny - show all first fields\nq - finish a session\n\n";
+	string s;
+	string param;
+
+	char code; cout << '>';
+	cin >> s; code = s[0];
+	if(OpInt.find(code)!= string::npos)
+	{
+		event.what = evMessage; 
+		switch (code)
+		{
+		case 'm':event.command = cmMake; break;
+		case '+': event.command = cmAdd; break;
+		case '-': event.command=cmDel;break;
+		case '@': event.command=cmShow;break;
+		case 'y': event.command = cmYear; break;
+		case'q': event.command = cmQuit;break;
+		//default: cout << "\nNo such command!\n";
+		}
+		
+		if(s.length()>1)
+		{
+			param = s.substr(1, s.length() - 1);
+
+			int A = atoi(param.c_str());
+			event.a=A;
+		}
+	}
+	else
+	{
+		event.what = evNothing;
+		cout << "\nNo such command!\n";
+	}
+}
+
+int Dialog::Execute()
+{
+	TEvent event; 
+	do 
+	{
+		EndState = 0;
+		GetEvent(event); 
+		HandleEvent(event); 
+	} 
+	while (!Valid()); 
+	return EndState;
+}
+
+int Dialog::Valid()
+{
+	if (EndState == 0) return 0; 
+	else return 1;
+}
+void Dialog::ClearEvent(TEvent& event)
+{
+	event.what = evNothing;
+}
+
+void Dialog::EndExec()
+{
+	EndState = 1;
+}
+
+void Dialog::HandleEvent(TEvent& event)
+{
+	if (event.what == evMessage)
+	{
+		switch (event.command)
+		{
+		case cmMake:
+			if (pntr != nullptr)
+			{
+				delete[] pntr;
+				pntr = nullptr;
+			}
+			len=event.a; 
+			cout << len << " " << pntr << endl;
+			pntr = new TRIAD * [len]; 
+			curr=0; 
+			ClearEvent(event);
+			break;
+		case cmAdd:
+			Add(); 
+			ClearEvent(event); 
+			break;
+		case cmDel:
+			Del(); 
+			ClearEvent( event ); 
+			break;
+		case cmShow:
+			Show(); 
+			ClearEvent( event );
+			break;
+		case cmYear:
+			Year();
+			ClearEvent(event);
+			break;
+		case cmQuit:
+			EndExec();
+			ClearEvent(event);
+			break;
+		};
+		
+	};
+}
+
+//
