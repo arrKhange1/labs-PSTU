@@ -154,7 +154,7 @@ int main()
     while (go)
     {
         cout << "It is the menu! Choose one of the labs below:\n\n";
-        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6(7). Lab 18.6\n8. Lab 18.8\n\n";
+        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6(7). Lab 18.6\n8. Lab 18.8\n9. Lab 18.9\n\n";
         cin >> choice;
         switch (choice)
         {
@@ -313,6 +313,126 @@ int main()
             Dialog EventMenu;
             EventMenu.Execute();
             
+            break;
+        }
+
+        case 9:
+        {
+            #define FIRST_VARIANT 1
+            #define SECOND_VARIANT 0
+            
+            #if FIRST_VARIANT == 1 // 1st variant of realization
+            
+            cout << "\n\n--1ST VARIANT--\n\n";
+            // проверка на превышение определенной МАКС. длины массива
+            try { Set<double> set1(25); }
+            catch (int& exc) { cout << "\nSize > MAX_SIZE\n"; }
+            
+            // проверка на пустой вывод
+            try
+            {
+                Set<double> set1;
+                cout << "\nSet1: " << set1 << endl;
+            }
+            catch (int& exc) { cout << "\nNothing to be printed!\n"; }
+            
+            // проверка на вычитание пустого множества или вычитание из пустого множества
+            try
+            {
+                Set<double> set1(5);
+                Set<double> set2;
+
+                if (set1() == 0 && set2() > 0) cout << "\nSet1: Void\n\nSet2: " << set2 << endl;
+                else if (set1() > 0 && set2() == 0) cout << "\nSet1: " << set1 << "\nSet2: Void\n";
+
+                Set<double> set3;
+                set3 = set1 - set2;
+                cout << endl << set1 << endl << set2 << endl << set3 << endl;
+            }
+            catch(int&exc) 
+            {
+                if (exc == 6) cout << "\nSets can't be differed > Set1 is empty\n";
+                else if (exc == 7) cout << "\nSets can't be differed > Set2 is empty\n";
+            }
+            
+            // проверка на задание индекса в диапазоне 0 <= i < size
+            try
+            {
+                Set<double> set1(5);
+                cout << "\nSet1: " << set1[-1] << endl;
+            }
+            catch (int& exc)
+            {
+                if (exc == 2) cout << "\nIndex >= Size\n";
+                else if (exc == 3) cout << "\nIndex < 0\n";
+            }
+            
+            // проверка на удаление элемента из УЖЕ пустого множества
+            try 
+            { 
+                Set<double> set1;
+                set1.Del();
+            }
+            catch (int& exc) { cout << "\nNothing to be deleted!\n"; }
+            
+            cout << "\n\n";
+
+            #elif SECOND_VARIANT == 1 // 2nd variant of realization
+
+            cout << "\n\n--2ND VARIANT--\n\n";
+            // проверка на превышение определенной МАКС. длины массива
+            try { Set<double> set1(25); }
+            catch (Error err) { err.PrintError(); }
+
+            // проверка на пустой вывод
+            try
+            {
+                Set<double> set1;
+                cout << "\nSet1: " << set1 << endl;
+            }
+            catch (Error err) { err.PrintError();; }
+
+            // проверка на вычитание пустого множества или вычитание из пустого множества
+            try
+            {
+                Set<double> set1;
+                Set<double> set2(10);
+                
+                if (set1() == 0 && set2() > 0) cout << "\nSet1: Void\n\nSet2: " << set2 << endl;
+                else if (set1() > 0 && set2() == 0) cout << "\nSet1: " << set1 << "\n\nSet2: Void\n";
+
+                Set<double> set3;
+                set3 = set1 - set2;
+            }
+            catch (Error err)
+            {
+                err.PrintError();
+            }
+
+            // проверка на задание индекса в диапазоне 0 <= i < size
+            try
+            {
+                Set<double> set1(5);
+                cout << "\nSet1: " << set1[5] << endl;
+            }
+            catch (Error err)
+            {
+                err.PrintError();
+            }
+
+            // проверка на удаление элемента из УЖЕ пустого множества
+            try
+            {
+                Set<double> set1;
+                set1.Del();
+            }
+            catch (Error err) { err.PrintError(); }
+
+            cout << "\n\n";
+
+
+            #endif
+
             break;
         }
 
