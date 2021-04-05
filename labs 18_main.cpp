@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <fstream>
 #include "classes.h"
 using namespace std;
 
@@ -59,7 +60,7 @@ istream& operator >> (istream& in, Money& obj)
 
 ostream& operator << (ostream& out, Money& obj)
 {
-    out << "\nBalance: " << obj.rub << "." << obj.cent << endl;
+    out << "Balance: " << obj.rub << "." << obj.cent << endl;
     return out;
 }
 //
@@ -141,7 +142,17 @@ ostream& operator << (ostream& out, Vector& obj)
 }
 //
 
- //for lab 18.6
+ //for lab 18.10
+
+
+void infile(ofstream& f)
+{
+    Money obj;
+    cin >> obj;
+    f.write(reinterpret_cast<char*>(&obj), sizeof(Money));
+}
+
+//
 
 
 
@@ -432,6 +443,22 @@ int main()
 
 
             #endif
+
+            break;
+        }
+
+        case 10:
+        {
+            ofstream outfile("test.txt",ios::app);
+            infile(outfile);
+
+            outfile.close();
+            ifstream infile("test.txt");
+            Money temp;
+            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+            {
+                cout << temp << endl;
+            }
 
             break;
         }
