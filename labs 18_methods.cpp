@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <iomanip>
 #include "classes.h"
 using namespace std;
 
@@ -188,6 +190,25 @@ Money Money::operator--(int value)
 		cent = 99;
 	}
 	return temp;
+}
+
+bool Money::operator > (const Money& obj)
+{
+	if (rub > obj.rub) return true;
+	else if (rub < obj.rub) return false;
+	else if (cent > obj.cent) return true;
+	else return false;
+}
+
+void Money::operator+(float bal)
+{
+	string subsctr_from_dot_to_end = to_string(bal).substr(to_string(bal).find('.'), to_string(bal)[to_string(bal).length()-1]);
+	if (subsctr_from_dot_to_end.substr(1, subsctr_from_dot_to_end.find('0')-1).length() == 1)
+	{
+		int cent_concatenate = (cent + stoi(to_string(bal)[to_string(bal).find('.') + 1] + to_string(0)));
+		cent = cent_concatenate % 100;
+		rub += (int)bal + cent_concatenate / 100;
+	}
 }
 
 ////
