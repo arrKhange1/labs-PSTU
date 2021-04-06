@@ -76,7 +76,7 @@ istream& operator >> (istream& in, Triad& obj)
 }
 ostream& operator << (ostream& out, Triad& obj)
 {
-    out << "\nFirst,Second,Third: " << obj.first << ", " << obj.second <<", " << obj.third << endl;
+    out << "\nFirst,Second,Third: " << obj.first << ", " << obj.second << ", " << obj.third << endl;
     return out;
 }
 
@@ -132,7 +132,7 @@ ostream& operator << (ostream& out, Vector& obj)
         for (int i = 0; i < obj.curr; ++i)
         {
             (*p)->Inc();
-            cout << "override obj: " <<*p << endl;
+            cout << "override obj: " << *p << endl;
             (*p)->Show();
             p++;
         }
@@ -254,13 +254,13 @@ int main()
             cin >> alotta;
             cout << alotta;
 
-            Money much(105120,1);
+            Money much(105120, 1);
             cout << much;
             alotta = much--;
             cout << "\nalotta = much--: " << alotta << endl;
             alotta = --much;
             cout << "\nalotta = --much: " << alotta << endl;
-            
+
             cout << "\nalotta == much: " << (alotta == much) << endl;
             cout << "\nalotta != much: " << (alotta != much) << "\n\n";
 
@@ -272,7 +272,7 @@ int main()
             cin >> nums;
             cout << "\nnums: " << nums;
             Triad nums1(2001, 5, 18);
-            cout <<"\nnums1: " << nums1;
+            cout << "\nnums1: " << nums1;
             nums = nums1;
             cout << "\nnums = nums1: " << nums;
 
@@ -283,7 +283,7 @@ int main()
             // subs
             subs1(bday);
             nums = subs2();
-            cout <<"\nnums: " << nums << endl;
+            cout << "\nnums: " << nums << endl;
 
             break;
         }
@@ -298,7 +298,7 @@ int main()
 
             break;
         }
-        
+
         case 6:
         {
             // also for 18.7
@@ -313,7 +313,7 @@ int main()
             set3[1] = 43345455;
             cout << "\nSet3: " << set3 << endl;
             cout << "\nLength of Set1: " << set1() << endl;
-            
+
             cout << "\n\n";
 
             break;
@@ -323,22 +323,22 @@ int main()
         {
             Dialog EventMenu;
             EventMenu.Execute();
-            
+
             break;
         }
 
         case 9:
         {
-            #define FIRST_VARIANT 1
-            #define SECOND_VARIANT 0
-            
-            #if FIRST_VARIANT == 1 // 1st variant of realization
-            
+#define FIRST_VARIANT 1
+#define SECOND_VARIANT 0
+
+#if FIRST_VARIANT == 1 // 1st variant of realization
+
             cout << "\n\n--1ST VARIANT--\n\n";
             // проверка на превышение определенной МАКС. длины массива
             try { Set<double> set1(25); }
             catch (int& exc) { cout << "\nSize > MAX_SIZE\n"; }
-            
+
             // проверка на пустой вывод
             try
             {
@@ -346,7 +346,7 @@ int main()
                 cout << "\nSet1: " << set1 << endl;
             }
             catch (int& exc) { cout << "\nNothing to be printed!\n"; }
-            
+
             // проверка на вычитание пустого множества или вычитание из пустого множества
             try
             {
@@ -360,12 +360,12 @@ int main()
                 set3 = set1 - set2;
                 cout << endl << set1 << endl << set2 << endl << set3 << endl;
             }
-            catch(int&exc) 
+            catch (int& exc)
             {
                 if (exc == 6) cout << "\nSets can't be differed > Set1 is empty\n";
                 else if (exc == 7) cout << "\nSets can't be differed > Set2 is empty\n";
             }
-            
+
             // проверка на задание индекса в диапазоне 0 <= i < size
             try
             {
@@ -377,18 +377,18 @@ int main()
                 if (exc == 2) cout << "\nIndex >= Size\n";
                 else if (exc == 3) cout << "\nIndex < 0\n";
             }
-            
+
             // проверка на удаление элемента из УЖЕ пустого множества
-            try 
-            { 
+            try
+            {
                 Set<double> set1;
                 set1.Del();
             }
             catch (int& exc) { cout << "\nNothing to be deleted!\n"; }
-            
+
             cout << "\n\n";
 
-            #elif SECOND_VARIANT == 1 // 2nd variant of realization
+#elif SECOND_VARIANT == 1 // 2nd variant of realization
 
             cout << "\n\n--2ND VARIANT--\n\n";
             // проверка на превышение определенной МАКС. длины массива
@@ -408,7 +408,7 @@ int main()
             {
                 Set<double> set1;
                 Set<double> set2(10);
-                
+
                 if (set1() == 0 && set2() > 0) cout << "\nSet1: Void\n\nSet2: " << set2 << endl;
                 else if (set1() > 0 && set2() == 0) cout << "\nSet1: " << set1 << "\n\nSet2: Void\n";
 
@@ -442,23 +442,62 @@ int main()
             cout << "\n\n";
 
 
-            #endif
+#endif
 
             break;
         }
 
         case 10:
         {
-            ofstream outfile("test.txt",ios::app);
-            infile(outfile);
-
+            ofstream outfile("test.txt");
+            
+            cout << "\nEnter a quantity of objects: ";
+            int n; cin >> n;
+            for (int i = 0; i < n; ++i)
+            {
+                infile(outfile);
+            }
             outfile.close();
+            
             ifstream infile("test.txt");
             Money temp;
             while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
             {
                 cout << temp << endl;
             }
+            infile.close();
+
+            int i = 1;
+            cout << "\nEnter a position of an object and an object: "; int pos; cin >> pos; cout << endl; Money obj_pos; cin >> obj_pos;
+            outfile.open("help_test.txt");
+            infile.open("test.txt");
+            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+            {
+                if (i <= pos)
+                {
+                    outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
+                }
+                
+                else
+                {
+                    if (i == pos+1) outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+                    outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
+                }
+                
+                
+                if (pos == n && i == pos) outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+                ++i;
+            }
+            i = 1;
+            infile.close();
+            outfile.close();
+
+            infile.open("help_test.txt");
+            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+            {
+                cout << temp << endl;
+            }
+            infile.close();
 
             break;
         }
@@ -467,15 +506,15 @@ int main()
         {
             cout << "Such lab doesnt exist! Try again:\n\n";
         }
-      
+
         }
-        
+
         cout << "Continue? Enter 1 or 0: ";
         cin >> go;
         cout << endl;
     }
-    
-    
+
+
 
 
     return 0;
