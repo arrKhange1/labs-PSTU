@@ -449,8 +449,14 @@ int main()
 
         case 10:
         {
-            ofstream outfile("test.txt");
+            Money test(100, 90);
             
+            cout << to_string(102.57) << endl;
+            test + 102.9; // 203.80
+            cout << test << endl;
+
+            ofstream outfile("test.txt");
+
             cout << "\nEnter a quantity of objects: ";
             int n; cin >> n;
             for (int i = 0; i < n; ++i)
@@ -458,7 +464,7 @@ int main()
                 infile(outfile);
             }
             outfile.close();
-            
+
             ifstream infile("test.txt");
             Money temp;
             while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
@@ -467,8 +473,10 @@ int main()
             }
             infile.close();
 
+            // insertion K elements
             int i = 1;
-            cout << "\nEnter a position of an object and an object: "; int pos; cin >> pos; cout << endl; Money obj_pos; cin >> obj_pos;
+            cout << "\nEnter a position to insert K objects after: "; int pos; cin >> pos; cout << endl << "Enter K: "; int K; cin >> K; cout << endl;
+            Money obj_pos;
             outfile.open("help_test.txt");
             infile.open("test.txt");
             while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
@@ -477,15 +485,27 @@ int main()
                 {
                     outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
                 }
-                
+
                 else
                 {
-                    if (i == pos+1) outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+                    if (i == pos + 1)
+                    {
+                        for (int i = 0; i < K; ++i)
+                        {
+                            cout << "\nEnter " << i + 1 << " object: "; cin >> obj_pos;
+                            outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+                        }
+                    }
                     outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
                 }
-                
-                
-                if (pos == n && i == pos) outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+
+                // pos = len(file)
+                if (pos == n && i == pos)
+                    for (int i = 0; i < K; ++i)
+                    {
+                        cout << "\nEnter " << i + 1 << " object: "; cin >> obj_pos;
+                        outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+                    }
                 ++i;
             }
             i = 1;
@@ -498,7 +518,30 @@ int main()
                 cout << temp << endl;
             }
             infile.close();
+            //
 
+            // delete
+            outfile.open("woDeleted.txt");
+            infile.open("help_test.txt");
+            Money somuch;
+            cout << "\nEnter a definite object: "; cin >> somuch; cout << endl;
+            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+            {
+                if (!(temp > somuch)) outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
+            }
+            outfile.close();
+            infile.close();
+            
+            infile.open("woDeleted.txt");
+            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+            {
+                cout << temp << endl;
+            }
+            infile.close();
+            remove("help_test.txt");
+            cout << rename("woDeleted.txt", "help_test.txt") << endl;
+            //
+            
             break;
         }
 
