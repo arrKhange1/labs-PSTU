@@ -50,6 +50,8 @@ public:
 	Money& operator = (const Money&);
 	bool operator == (const Money&);
 	bool operator != (const Money&);
+	bool operator > (const Money&);
+	void operator + (float);
 	Money& operator -- ();
 	Money operator -- (int);
 
