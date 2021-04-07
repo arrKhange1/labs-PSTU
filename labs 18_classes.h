@@ -7,7 +7,7 @@ using namespace std;
 class Triangle
 {
 public:
-	bool Init(float,float);
+	bool Init(float, float);
 	void Read();
 	void ShowSides();
 	void ShowHipotenuse();
@@ -111,8 +111,8 @@ protected:
 	int second;
 	int third;
 };
- 
-class DATE: public TRIAD
+
+class DATE : public TRIAD
 {
 public:
 	DATE();
@@ -177,8 +177,8 @@ private:
 
 // определение методов ШАБЛОННЫХ классов должно быть в одном хедере с объявлением класса
 #define MAX_SIZE 10
-#define FIRST_VARIANT 1
-#define SECOND_VARIANT 0
+#define FIRST_VARIANT 0
+#define SECOND_VARIANT 1
 
 template<typename T>
 Set<T>::Set()
@@ -254,10 +254,10 @@ Set<T> Set<T>::operator -(const Set<T>& obj)
 {
 	if (this->arr == nullptr and FIRST_VARIANT) throw 6;
 	else if (obj.arr == nullptr and FIRST_VARIANT) throw 7;
-	
+
 	if (this->arr == nullptr and SECOND_VARIANT) throw Error("\nSets can't be differed > Set1 is empty\n");
 	else if (obj.arr == nullptr and SECOND_VARIANT) throw Error("\nSets can't be differed > Set2 is empty\n");
-	
+
 	int res;
 	size > obj.size ? res = size : res = obj.size;
 	Set<T> temp(res);
@@ -302,13 +302,13 @@ ostream& operator << (ostream& out, const Set<T>& obj)
 // lab 18.8 
 
 const int evNothing = 0;//пустое событие 
-const int evMessage=100;//непустое событие 
-const int cmAdd=1;//добавить объект в группу 
-const int cmDel=2;//удалить объект из группы
+const int evMessage = 100;//непустое событие 
+const int cmAdd = 1;//добавить объект в группу 
+const int cmDel = 2;//удалить объект из группы
 const int cmYear = 3;//вывести первое поле объектов группы
-const int cmShow=4;//вывести всю группу
+const int cmShow = 4;//вывести всю группу
 const int cmMake = 6;//создать группу 
-const int cmQuit=101;//выход
+const int cmQuit = 101;//выход
 
 struct TEvent
 {
@@ -332,8 +332,8 @@ public:
 	Dialog(void);
 	virtual void GetEvent(TEvent& event);
 	virtual int Execute();
-	virtual void HandleEvent (TEvent& event); 
-	virtual void ClearEvent (TEvent& event); 
+	virtual void HandleEvent(TEvent& event);
+	virtual void ClearEvent(TEvent& event);
 	int Valid();
 	void EndExec();
 protected:
