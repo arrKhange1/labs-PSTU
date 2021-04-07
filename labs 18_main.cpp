@@ -152,6 +152,82 @@ void infile(ofstream& f)
     f.write(reinterpret_cast<char*>(&obj), sizeof(Money));
 }
 
+void PrintSequence(ifstream& infile)
+{
+    Money temp;
+    while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+    {
+        cout << temp << endl;
+    }
+}
+
+void Insert(ifstream&infile, int K, int pos, int len)
+{
+    ofstream outfile("help_test.txt");
+    
+    cout <<"\nSize: " << sizeof(infile)/sizeof(Money) << endl;
+    Money obj_pos;
+    Money temp;
+    int i = 1;
+    while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+    {
+        if (i <= pos)
+        {
+            outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
+        }
+
+        else
+        {
+            if (i == pos + 1)
+            {
+                for (int i = 0; i < K; ++i)
+                {
+                    cout << "\nEnter " << i + 1 << " object: "; cin >> obj_pos;
+                    outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+                }
+            }
+            outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
+        }
+
+        // pos = len(file)
+        if (pos == len && i == pos)
+            for (int i = 0; i < K; ++i)
+            {
+                cout << "\nEnter " << i + 1 << " object: "; cin >> obj_pos;
+                outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
+            }
+        ++i;
+    }
+    i = 1;
+    outfile.close();
+}
+
+void Delete(ifstream& infile, Money& somuch)
+{
+    ofstream outfile("woDeleted.txt");
+    Money temp;
+    while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+    {
+        if (!(temp > somuch)) outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
+    }
+    outfile.close();
+}
+
+void Increase(ifstream& infile, Money& somuch)
+{
+    ofstream outfile("increased_values.txt");
+    Money temp;
+    while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
+    {
+        if (temp == somuch)
+        {
+            temp + 1.5;
+        }
+        outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
+    }
+    outfile.close();
+}
+
 //
 
 
@@ -329,8 +405,8 @@ int main()
 
         case 9:
         {
-#define FIRST_VARIANT 1
-#define SECOND_VARIANT 0
+#define FIRST_VARIANT 0
+#define SECOND_VARIANT 1
 
 #if FIRST_VARIANT == 1 // 1st variant of realization
 
@@ -449,14 +525,9 @@ int main()
 
         case 10:
         {
-            Money test(100, 90);
-            
-            cout << to_string(102.57) << endl;
-            test + 102.9; // 203.80
-            cout << test << endl;
 
+            // fill sequence
             ofstream outfile("test.txt");
-
             cout << "\nEnter a quantity of objects: ";
             int n; cin >> n;
             for (int i = 0; i < n; ++i)
@@ -464,84 +535,64 @@ int main()
                 infile(outfile);
             }
             outfile.close();
+            
 
+            // PrintSequence
             ifstream infile("test.txt");
-            Money temp;
-            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
-            {
-                cout << temp << endl;
-            }
+            PrintSequence(infile);
             infile.close();
 
             // insertion K elements
-            int i = 1;
             cout << "\nEnter a position to insert K objects after: "; int pos; cin >> pos; cout << endl << "Enter K: "; int K; cin >> K; cout << endl;
-            Money obj_pos;
-            outfile.open("help_test.txt");
             infile.open("test.txt");
-            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
-            {
-                if (i <= pos)
-                {
-                    outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
-                }
-
-                else
-                {
-                    if (i == pos + 1)
-                    {
-                        for (int i = 0; i < K; ++i)
-                        {
-                            cout << "\nEnter " << i + 1 << " object: "; cin >> obj_pos;
-                            outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
-                        }
-                    }
-                    outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
-                }
-
-                // pos = len(file)
-                if (pos == n && i == pos)
-                    for (int i = 0; i < K; ++i)
-                    {
-                        cout << "\nEnter " << i + 1 << " object: "; cin >> obj_pos;
-                        outfile.write(reinterpret_cast<char*>(&obj_pos), sizeof(Money));
-                    }
-                ++i;
-            }
-            i = 1;
+            Insert(infile, K, pos, n);
             infile.close();
-            outfile.close();
-
+            
+            // PrintSequence
             infile.open("help_test.txt");
-            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
-            {
-                cout << temp << endl;
-            }
+            PrintSequence(infile);
             infile.close();
             //
 
             // delete
-            outfile.open("woDeleted.txt");
+            
             infile.open("help_test.txt");
             Money somuch;
             cout << "\nEnter a definite object: "; cin >> somuch; cout << endl;
-            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
-            {
-                if (!(temp > somuch)) outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
-            }
-            outfile.close();
+            
+            Delete(infile, somuch);
+
+            infile.close();
+
+            // PrintSequence
+            infile.open("woDeleted.txt");
+            PrintSequence(infile);
             infile.close();
             
-            infile.open("woDeleted.txt");
-            while (infile.read(reinterpret_cast<char*>(&temp), sizeof(Money)))
-            {
-                cout << temp << endl;
-            }
-            infile.close();
+            // file rename
             remove("help_test.txt");
             cout << rename("woDeleted.txt", "help_test.txt") << endl;
             //
+
+            // increasing values
             
+            infile.open("help_test.txt");
+            
+            cout << "\nEnter a value which should be increased "; cin >> somuch; cout << endl;
+            Increase(infile, somuch);
+
+            infile.close();
+
+            // PrintSequence
+            infile.open("increased_values.txt");
+            PrintSequence(infile);
+            infile.close();
+            
+            // file rename
+            remove("help_test.txt");
+            cout << rename("increased_values.txt", "help_test.txt") << endl;
+            //
+
             break;
         }
 
