@@ -1,7 +1,6 @@
 #include <iostream>
-#include <string>
+#include <cmath>
 #include <sstream>
-#include <iomanip>
 #include "classes.h"
 using namespace std;
 
@@ -124,7 +123,7 @@ Money::Money(long rub, int cent)
 
 Money::Money(const Money& object)
 {
-	cout << "\nConstr. copy for the object " << this <<" from " << &object << endl;
+	cout << "\nConstr. copy for the object " << this << " from " << &object << endl;
 	rub = object.rub;
 	cent = object.cent;
 }
@@ -201,14 +200,10 @@ bool Money::operator > (const Money& obj)
 }
 
 void Money::operator+(float bal)
-{
-	string subsctr_from_dot_to_end = to_string(bal).substr(to_string(bal).find('.'), to_string(bal)[to_string(bal).length()-1]);
-	if (subsctr_from_dot_to_end.substr(1, subsctr_from_dot_to_end.find('0')-1).length() == 1)
-	{
-		int cent_concatenate = (cent + stoi(to_string(bal)[to_string(bal).find('.') + 1] + to_string(0)));
-		cent = cent_concatenate % 100;
-		rub += (int)bal + cent_concatenate / 100;
-	}
+{	
+	int cent_concatenate = cent + round(stof(to_string(0) + to_string(bal).substr(to_string(bal).find('.'), to_string(bal).find('.') + 2)) * 100);
+	cent = cent_concatenate % 100;
+	rub += (int)bal + cent_concatenate / 100;	
 }
 
 ////
@@ -324,14 +319,14 @@ TRIAD::TRIAD(int first, int second, int third)
 	this->third = third;
 }
 
-DATE::DATE():TRIAD()
+DATE::DATE() :TRIAD()
 {
 	first = 0;
 	second = 0;
 	third = 0;
 }
 
-DATE::DATE(int first, int second, int third):TRIAD(first,second,third)
+DATE::DATE(int first, int second, int third) :TRIAD(first, second, third)
 {
 	this->first = first;
 	this->second = second;
@@ -439,33 +434,33 @@ Dialog::Dialog(void) :Vector()
 
 void Dialog::GetEvent(TEvent& event)
 {
-	string OpInt = "m+-@yq"; 
+	string OpInt = "m+-@yq";
 	cout << "\nm(with size of a group) - create a group\n+ - add an object\n- - delete an object\n@ - show all\ny - show all first fields\nq - finish a session\n\n";
 	string s;
 	string param;
 
 	char code; cout << '>';
 	cin >> s; code = s[0];
-	if(OpInt.find(code)!= string::npos)
+	if (OpInt.find(code) != string::npos)
 	{
-		event.what = evMessage; 
+		event.what = evMessage;
 		switch (code)
 		{
 		case 'm':event.command = cmMake; break;
 		case '+': event.command = cmAdd; break;
-		case '-': event.command=cmDel;break;
-		case '@': event.command=cmShow;break;
+		case '-': event.command = cmDel; break;
+		case '@': event.command = cmShow; break;
 		case 'y': event.command = cmYear; break;
-		case'q': event.command = cmQuit;break;
-		//default: cout << "\nNo such command!\n";
+		case'q': event.command = cmQuit; break;
+			//default: cout << "\nNo such command!\n";
 		}
-		
-		if(s.length()>1)
+
+		if (s.length() > 1)
 		{
 			param = s.substr(1, s.length() - 1);
 
 			int A = atoi(param.c_str());
-			event.a=A;
+			event.a = A;
 		}
 	}
 	else
@@ -477,20 +472,19 @@ void Dialog::GetEvent(TEvent& event)
 
 int Dialog::Execute()
 {
-	TEvent event; 
-	do 
+	TEvent event;
+	do
 	{
 		EndState = 0;
-		GetEvent(event); 
-		HandleEvent(event); 
-	} 
-	while (!Valid()); 
+		GetEvent(event);
+		HandleEvent(event);
+	} while (!Valid());
 	return EndState;
 }
 
 int Dialog::Valid()
 {
-	if (EndState == 0) return 0; 
+	if (EndState == 0) return 0;
 	else return 1;
 }
 void Dialog::ClearEvent(TEvent& event)
@@ -515,23 +509,23 @@ void Dialog::HandleEvent(TEvent& event)
 				delete[] pntr;
 				pntr = nullptr;
 			}
-			len=event.a; 
+			len = event.a;
 			cout << len << " " << pntr << endl;
-			pntr = new TRIAD * [len]; 
-			curr=0; 
+			pntr = new TRIAD * [len];
+			curr = 0;
 			ClearEvent(event);
 			break;
 		case cmAdd:
-			Add(); 
-			ClearEvent(event); 
+			Add();
+			ClearEvent(event);
 			break;
 		case cmDel:
-			Del(); 
-			ClearEvent( event ); 
+			Del();
+			ClearEvent(event);
 			break;
 		case cmShow:
-			Show(); 
-			ClearEvent( event );
+			Show();
+			ClearEvent(event);
 			break;
 		case cmYear:
 			Year();
@@ -542,7 +536,7 @@ void Dialog::HandleEvent(TEvent& event)
 			ClearEvent(event);
 			break;
 		};
-		
+
 	};
 }
 // 
