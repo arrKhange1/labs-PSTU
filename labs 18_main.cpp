@@ -5,6 +5,9 @@
 #include <string>
 #include <ctime>
 #include <fstream>
+#include <queue>
+#include <vector>
+#include <iterator>
 #include "classes.h"
 using namespace std;
 
@@ -161,11 +164,10 @@ void PrintSequence(ifstream& infile)
     }
 }
 
-void Insert(ifstream&infile, int K, int pos, int len)
+void Insert(ifstream& infile, int K, int pos, int len)
 {
     ofstream outfile("help_test.txt");
-    
-    cout <<"\nSize: " << sizeof(infile)/sizeof(Money) << endl;
+
     Money obj_pos;
     Money temp;
     int i = 1;
@@ -230,7 +232,268 @@ void Increase(ifstream& infile, Money& somuch)
 
 //
 
+// for 18.11
 
+template <class T>
+void PrintVect(vector<T>& vect)
+{
+    for (int i = 0; i < vect.size(); ++i) cout << vect[i] << " ";
+}
+
+void MakeVec(vector<float>&vectFl,int len)
+{
+    for (int i = 0; i < len; ++i)
+    {
+        vectFl.push_back(7.6 + (50 - rand() % 101) + i / 4.2);
+    }
+}
+
+float SredArifm(vector<float>& v)
+{
+    float sred_arifm = 0;
+    for (int i = 0; i < v.size(); ++i)
+    {
+        sred_arifm += (v[i] / (float)v.size());
+    }
+    cout << "\nSred_Arifm = " << sred_arifm << "\n\n";
+    return sred_arifm;
+}
+
+float SredArifm(vector<Money>& v)
+{
+    float sred_arifm_m = 0;
+    for (int i = 0; i < v.size(); ++i)
+    {
+        sred_arifm_m += stof(to_string(v[i].GetRub()) + "." + to_string(v[i].GetCent())) / (float)v.size();
+    }
+    cout << "\nSred_Arifm = " << sred_arifm_m << "\n\n";
+    return sred_arifm_m;
+}
+
+void MakeVec(vector<Money>& mv, int len)
+{
+    for (int i = 0; i < len; ++i)
+    {
+        Money temp(rand() % 500, rand() % 100);
+        mv.push_back(temp);
+    }
+}
+
+float FindMin(vector<float>& vectFl)
+{
+    float min = vectFl[0];
+    for (int i = 0; i < vectFl.size(); ++i)
+    {
+        if (vectFl[i] < min) min = vectFl[i];
+    }
+    cout << "\nMin: " << min << "\n\n";
+    return min;
+}
+
+Money FindMin(vector<Money>& mv)
+{
+    Money money_min = mv[0];
+    for (int i = 0; i < mv.size(); ++i)
+    {
+        if (!(mv[i] > money_min)) money_min = mv[i];
+    }
+    cout << "\nMin Money: " << money_min << endl;
+    return money_min;
+}
+
+void DelFromVec(vector<float>& vectFl, float sr_arifm_fl)
+{
+    int k = 0;
+    while (k < vectFl.size())
+    {
+        if (vectFl[k] > sr_arifm_fl)
+        {
+            vectFl.erase(vectFl.begin() + k);
+        }
+        else ++k;
+    }
+}
+
+void DelFromVec(vector<Money>& mv, float sred_arifm_m)
+{
+    int i = 0;
+    Money sred_arifm1;
+    sred_arifm1.SetRub((int)sred_arifm_m); sred_arifm1.SetCent((sred_arifm_m - (int)sred_arifm_m) * 100);
+    while (i < mv.size())
+    {
+        if (mv[i] > sred_arifm1)
+        {
+            mv.erase(mv.begin() + i);
+
+        }
+        else ++i;
+    }
+}
+
+float FindMax(vector<float>& vectFl)
+{
+    float maxim = vectFl[0];
+    for (int i = 0; i < vectFl.size(); ++i)
+    {
+        if (vectFl[i] > maxim) maxim = vectFl[i];
+    }
+    cout << "\n\nMax: " << maxim << endl;
+    return maxim;
+}
+
+Money FindMax(vector<Money>& mv)
+{
+    Money money_max = mv[0];
+    for (int i = 0; i < mv.size(); ++i)
+    {
+        if (mv[i] > money_max) money_max = mv[i];
+    }
+    cout << "\nMoney Max: " << money_max << endl;
+    return money_max;
+}
+
+void MultByMaxInVec(vector<float>& vectFl, float max_fl)
+{
+    for (int i = 0; i < vectFl.size(); ++i)
+    {
+        vectFl[i] *= max_fl;
+    }
+}
+
+void MultByMaxInVec(vector<Money>& mv, Money money_max)
+{
+    float moneymax = stof(to_string(money_max.GetRub()) + "." + to_string(money_max.GetCent()));
+    float multiple = 1;
+    for (int i = 0; i < mv.size(); ++i)
+    {
+        multiple = moneymax * stof(to_string(mv[i].GetRub()) + "." + to_string(mv[i].GetCent()));
+        mv[i].SetRub((int)multiple);
+        mv[i].SetCent((multiple - (int)multiple) * 100);
+    }
+}
+
+// ADAPTER (TASK 4)
+
+vector<Money> queue_to_vector(priority_queue<Money> q)
+{
+    vector<Money> v;
+    while (!q.empty())
+    {
+        v.push_back(q.top());
+        q.pop();
+    }
+    return v;
+}
+
+priority_queue<Money> vector_to_queue(vector<Money> v)
+{
+    priority_queue<Money> q;
+    for (int i = 0; i < v.size(); ++i)
+    {
+        q.push(v[i]);
+    }
+    return q;
+}
+
+void MakeQueue(priority_queue<Money>&q,int len)
+{
+    for (int i = 0; i < len; ++i)
+    {
+        Money temp(rand() % 500, rand() % 100);
+        q.push(temp);
+    }
+}
+
+void PrintQueue(priority_queue<Money>& q)
+{
+
+    vector<Money> v1 = queue_to_vector(q);
+    while (!q.empty())
+    {
+        Money temp = q.top();
+        cout << temp << " ";
+        q.pop();
+    }
+    q = vector_to_queue(v1);
+}
+
+Money QueueMin(priority_queue<Money>& MoneyPriora)
+{
+    vector<Money> v1 = queue_to_vector(MoneyPriora);
+    Money min_queue;
+    int k = MoneyPriora.size();
+    while (!MoneyPriora.empty())
+    {
+        if (k == 1)
+        {
+            min_queue = MoneyPriora.top();
+        }
+        MoneyPriora.pop();
+        --k;
+    }
+    cout << endl << min_queue << endl;
+    MoneyPriora = vector_to_queue(v1);
+    return min_queue;
+}
+
+void QueueInsert(priority_queue<Money>& MoneyPriora, int pos)
+{
+    vector<Money> v1 = queue_to_vector(MoneyPriora);
+    v1.insert(v1.begin() + (pos - 1), QueueMin(MoneyPriora));
+    cout << endl << "\nInsertion on a vector's position\n";
+    PrintVect(v1);
+    cout << endl;
+    MoneyPriora = vector_to_queue(v1);
+}
+
+float QueueSredArifm(priority_queue<Money>& MoneyPriora)
+{
+    vector<Money> v1 = queue_to_vector(MoneyPriora);
+    int l = MoneyPriora.size();
+    float sred_arifm_m = 0;
+    while (!MoneyPriora.empty())
+    {
+        Money temp = MoneyPriora.top();
+        sred_arifm_m += stof(to_string(temp.GetRub()) + "." + to_string(temp.GetCent())) / (float)l;
+        MoneyPriora.pop();
+    }
+    cout << "\nSred Arifm: " << sred_arifm_m << endl;
+    MoneyPriora = vector_to_queue(v1);
+    return sred_arifm_m;
+}
+
+void QueueDel(priority_queue<Money>&MoneyPriora, float sred_arifm_m)
+{
+    vector<Money> v1;
+    Money sred_arifm;
+    sred_arifm.SetRub((int)sred_arifm_m); sred_arifm.SetCent((sred_arifm_m - (int)sred_arifm_m) * 100);
+    while (!MoneyPriora.empty())
+    {
+        Money temp = MoneyPriora.top();
+        if (!(temp > sred_arifm)) v1.push_back(temp);
+        MoneyPriora.pop();
+    }
+    MoneyPriora = vector_to_queue(v1);
+}
+
+void QueueMultByMax(priority_queue<Money>& MoneyPriora, Money& money_max)
+{
+    vector<Money> v1;
+    float moneymax = stof(to_string(money_max.GetRub()) + "." + to_string(money_max.GetCent()));
+    float multiple = 1;
+    while (!MoneyPriora.empty())
+    {
+        Money temp = MoneyPriora.top();
+        multiple = moneymax * stof(to_string(temp.GetRub()) + "." + to_string(temp.GetCent()));
+        temp.SetRub((int)multiple); temp.SetCent((multiple - (int)multiple) * 100);
+        v1.push_back(temp);
+        MoneyPriora.pop();
+    }
+    MoneyPriora = vector_to_queue(v1);
+}
+
+
+//
 
 int main()
 {
@@ -241,7 +504,7 @@ int main()
     while (go)
     {
         cout << "It is the menu! Choose one of the labs below:\n\n";
-        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6(7). Lab 18.6\n8. Lab 18.8\n9. Lab 18.9\n\n";
+        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6(7). Lab 18.6\n8. Lab 18.8\n9. Lab 18.9\n10. Lab 18.10\n\n";
         cin >> choice;
         switch (choice)
         {
@@ -535,7 +798,7 @@ int main()
                 infile(outfile);
             }
             outfile.close();
-            
+
 
             // PrintSequence
             ifstream infile("test.txt");
@@ -547,7 +810,7 @@ int main()
             infile.open("test.txt");
             Insert(infile, K, pos, n);
             infile.close();
-            
+
             // PrintSequence
             infile.open("help_test.txt");
             PrintSequence(infile);
@@ -555,11 +818,11 @@ int main()
             //
 
             // delete
-            
+
             infile.open("help_test.txt");
             Money somuch;
             cout << "\nEnter a definite object: "; cin >> somuch; cout << endl;
-            
+
             Delete(infile, somuch);
 
             infile.close();
@@ -568,16 +831,16 @@ int main()
             infile.open("woDeleted.txt");
             PrintSequence(infile);
             infile.close();
-            
+
             // file rename
             remove("help_test.txt");
             cout << rename("woDeleted.txt", "help_test.txt") << endl;
             //
 
             // increasing values
-            
+
             infile.open("help_test.txt");
-            
+
             cout << "\nEnter a value which should be increased "; cin >> somuch; cout << endl;
             Increase(infile, somuch);
 
@@ -587,11 +850,190 @@ int main()
             infile.open("increased_values.txt");
             PrintSequence(infile);
             infile.close();
-            
+
             // file rename
             remove("help_test.txt");
             cout << rename("increased_values.txt", "help_test.txt") << endl;
             //
+
+            break;
+        }
+
+        case 11:
+        {
+
+            // FLOAT VEC done
+            
+            typedef vector<float> VectorFl;
+            VectorFl vectFl;
+            
+            // making a vector
+            int len_vectorFl;
+            cout << "\nEnter length of a vector: "; cin >> len_vectorFl;
+            MakeVec(vectFl,len_vectorFl);
+            PrintVect(vectFl);
+            cout << "\n\n";
+            
+            // add min elem on a position
+            int pos; cout << "Enter a position to insert an element there: "; cin >> pos;
+            vectFl.insert(vectFl.begin()+(pos-1), FindMin(vectFl));
+            //
+            cout << "\nAfter insertion\n";
+            PrintVect(vectFl);
+            
+            // del elems
+            cout << "\n\nAfter Del Elems\n";
+            DelFromVec(vectFl, SredArifm(vectFl));
+            cout << endl;
+            //
+            PrintVect(vectFl);
+            
+            // multiplying by max elem
+            float max_fl = FindMax(vectFl);
+            MultByMaxInVec(vectFl, max_fl);
+           
+            cout << "\n\nResult: ";
+            PrintVect(vectFl);
+            cout << "\n\n";
+            
+            // FLOAT VEC done
+
+            // PARAM CLASS VECTOR done // 
+            
+            cout << "\n\nParam class\n\n";
+            Vect<int> v(len_vectorFl);
+            v.Print();
+            //
+            cout << "\nEnter a position to insert an element there: "; cin >> pos;
+            v.AddMin(pos, v.Min());
+            cout << endl << "After insertion of Min elem:\n";
+            v.Print();
+            //
+            v.Del(v.SredArifm());
+            cout << endl << "After Del elems > SredArifm:\n";
+            v.Print();
+            //
+            v.MultByMax(v.Max());
+            cout << endl << "MultbyMax:\n";
+            v.Print();
+            // PARAM CLASS VECTOR done //
+
+            // VECT TYPE MONEY done //
+            cout << "\n\nVECT TYPE MONEY\n\n";
+
+            typedef vector<Money> MoneyVec;
+            MoneyVec mv;
+            
+            // make vec
+            MakeVec(mv, len_vectorFl);
+            PrintVect(mv);
+            cout << endl;
+            //
+
+            // add min on pos
+            cout << "\nEnter a position to insert an element there: "; cin >> pos;
+            mv.insert(mv.begin() + (pos - 1), FindMin(mv));
+            cout << "\nAfter Insertion\n";
+            PrintVect(mv);
+            cout << endl;
+            
+            // del > sr arifm
+            cout << "\nAfter Del Elems\n";
+            DelFromVec(mv, SredArifm(mv));
+            PrintVect(mv);
+            cout << endl;
+            //
+           
+            // mult all by money max
+            cout << "After Mult all by Money Max\n";
+            Money money_max = FindMax(mv);
+            MultByMaxInVec(mv, money_max);
+
+            PrintVect(mv);
+            cout << endl;
+            
+            // VECT TYPE MONEY done //
+
+            // ADAPTER (TASK 4) PRIORITY_QUEUE done
+            cout << "\n\nADAPTER (TASK 4) PRIORITY_QUEUE\n\n";
+
+
+            priority_queue<Money> MoneyPriora;
+            vector<Money> v1;
+
+            // make queue
+            MakeQueue(MoneyPriora, len_vectorFl);
+            // print queue
+            PrintQueue(MoneyPriora);
+            //
+
+            // Insertion of min elem
+            cout << "\nEnter a position to insert an element there: "; cin >> pos;
+            QueueInsert(MoneyPriora, pos);
+            //
+
+            // print queue
+            cout << "\nInsertion in a queue\n";
+            PrintQueue(MoneyPriora);
+            //
+
+            // Del > Sred Arifm
+            QueueDel(MoneyPriora, QueueSredArifm(MoneyPriora));
+            //
+
+            // print queue
+            cout << "\nAfter Del > Sred Arifm\n";
+            PrintQueue(MoneyPriora);
+            //
+
+            // Max Elem
+            money_max = MoneyPriora.top();
+            cout << "\nMax Elem: " << money_max << endl;
+            //
+
+            // MultByMax
+            QueueMultByMax(MoneyPriora, money_max);
+            //
+
+            // print queue
+            cout << "\nAfter MultByMax\n";
+            PrintQueue(MoneyPriora);
+            //
+
+            // ADAPTER (TASK 4) PRIORITY_QUEUE done
+
+            // ADAPTER (TASK 5) done
+            cout << "\n\nADAPTER (TASK 5) PRIORITY_QUEUE\n\n";
+
+            // make queue
+            PrioQueue<double> qq(len_vectorFl);
+            qq.Print();
+            //
+
+            // Add Min
+            cout << "\nEnter a position to insert an element there: "; cin >> pos;
+            qq.AddMin(pos, qq.Min());
+            cout << "\nInsertion in a queue\n";
+            qq.Print();
+            //
+            
+            // Del > Sred Arifm
+            qq.Del(qq.SredArifm());
+            cout << "\nAfter Del > Sred Arifm\n";
+            qq.Print();
+            //
+
+            // MultByMax
+            qq.MultByMax(qq.Max());
+            cout << "\nAfter MultByMax\n";
+            qq.Print();
+            //
+            
+            // ADAPTER (TASK 5) done
+
+
+
+
 
             break;
         }
@@ -603,7 +1045,7 @@ int main()
 
         }
 
-        cout << "Continue? Enter 1 or 0: ";
+        cout << "\n\nContinue? Enter 1 or 0: ";
         cin >> go;
         cout << endl;
     }
