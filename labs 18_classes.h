@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <vector>
+#include <queue>
 #include <string>
 
 using namespace std;
@@ -51,6 +53,7 @@ public:
 	bool operator == (const Money&);
 	bool operator != (const Money&);
 	bool operator > (const Money&);
+	bool operator< (const Money& p)const;
 	void operator + (float);
 	Money& operator -- ();
 	Money operator -- (int);
@@ -340,8 +343,252 @@ protected:
 	int EndState;
 };
 
-// lab 18.9
+// lab 18.11
+template <class T>
+class Vect
+{
+public:
+	Vect();
+	Vect(int);
+	T Min();
+	T Max();
+	T SredArifm();
+	void AddMin(int,T);
+	void Del(T);
+	void MultByMax(T);
+	void Print();
+public:
+	vector <T> vec;
+};
 
+template <class T>
+Vect<T>::Vect()
+{
 
+}
+
+template <class T>
+Vect<T>::Vect(int len)
+{
+	for (int i = 0; i < len; ++i)
+	{
+		vec.push_back((T)7.6 + (50 - rand() % 101) + (T)(i / 4.2));
+		
+	}
+}
+
+template <class T>
+T Vect<T>::Min()
+{
+	float min = vec[0];
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		if (vec[i] < min) min = vec[i];
+	}
+	cout << "\nMin Elem: " << min << "\n\n";
+	return min;
+}
+
+template <class T>
+T Vect<T>::Max()
+{
+	T maxim = vec[0];
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		if (vec[i] > maxim) maxim = vec[i];
+	}
+	cout << "\nMax Elem: " << maxim << "\n\n";
+	return maxim;
+}
+
+template <class T>
+void Vect<T>::AddMin(int pos, T min)
+{
+
+	vec.insert(vec.begin() + (pos - 1), min);
+}
+
+template <class T>
+T Vect<T>::SredArifm()
+{
+	T sred_arifm = 0;
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		sred_arifm += (vec[i] / (T)vec.size());
+	}
+	cout << "\nSred_Arifm = " << sred_arifm << "\n\n";
+	return sred_arifm;
+}
+
+template <class T>
+void Vect<T>::Del(T sred_arifm)
+{
+	cout << "\nDel Elems\n";
+
+	int k = 0;
+	while (k < vec.size())
+	{
+		if (vec[k] > sred_arifm)
+		{
+			vec.erase(vec.begin() + k);
+		}
+		else ++k;
+	}
+}
+
+template<class T>
+void Vect<T>::MultByMax(T maxim)
+{
+	for (int i = 0; i < vec.size(); ++i) vec[i] *= maxim;
+}
+
+template <class T>
+void Vect<T>::Print()
+{
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		cout << vec[i] << " ";
+	}
+	cout << endl;
+}
+
+// ADAPTER (TASK 5)
+
+template <class T>
+class PrioQueue
+{
+public:
+	PrioQueue(int);
+	T Min();
+	T Max();
+	T SredArifm();
+	void AddMin(int,T);
+	void Del(T);
+	void MultByMax(T);
+	void Print();
+private:
+	priority_queue<T> q;
+};
+
+template <class T>
+vector<T> queue_to_vector(priority_queue<T> q)
+{
+	vector<T> v;
+	while (!q.empty())
+	{
+		v.push_back(q.top());
+		q.pop();
+	}
+	return v;
+}
+
+template <class T>
+priority_queue<T> vector_to_queue(vector<T> v)
+{
+	priority_queue<T> q;
+	for (int i = 0; i < v.size(); ++i)
+	{
+		q.push(v[i]);
+	}
+	return q;
+}
+
+template <class T>
+void PrioQueue<T>::Print()
+{
+	vector <T> v1 = queue_to_vector(q);
+	while (!q.empty())
+	{
+		cout << q.top() << " ";
+		q.pop();
+	}
+	cout << endl;
+	q = vector_to_queue(v1);
+}
+
+template <class T>
+PrioQueue<T>::PrioQueue(int len)
+{
+	for (int i = 0; i < len; ++i)
+	{
+		q.push((T)7.6 + (50 - rand() % 101) + (T)(i / 4.2));
+	}
+}
+
+template <class T>
+T PrioQueue<T>::Min()
+{
+	vector<T> v1 = queue_to_vector(q);
+	T min_queue = q.top();
+	int k = q.size();
+	while (!q.empty())
+	{
+		if (k == 1)
+		{
+			min_queue = q.top();
+		}
+		q.pop();
+		--k;
+	}
+	cout << "\nMin: " << min_queue << endl;
+	q = vector_to_queue(v1);
+	return min_queue;
+}
+
+template <class T>
+T PrioQueue<T>::Max()
+{
+	cout << "\nMax: " << q.top() << endl;
+	return q.top();
+}
+
+template <class T>
+T PrioQueue<T>::SredArifm()
+{
+	vector<T> v1 = queue_to_vector(q);
+	T len = q.size();
+	T sred_arifm = 0;
+	while (!q.empty())
+	{
+		sred_arifm += (q.top() / (T)len);
+		q.pop();
+	}
+	q = vector_to_queue(v1);
+	cout << "\nSred Arifm: " << sred_arifm << endl;
+	return sred_arifm;
+}
+
+template <class T>
+void PrioQueue<T>::AddMin(int pos, T min)
+{
+	vector<T> v1;
+	v1 = queue_to_vector(q);
+	v1.insert(v1.begin() + (pos - 1), min);
+	q = vector_to_queue(v1);
+}
+
+template <class T>
+void PrioQueue<T>::Del(T sred)
+{
+	vector <T> v1;
+	while (!q.empty())
+	{
+		if (q.top() <= sred) v1.push_back(q.top());
+		q.pop();
+	}
+	q = vector_to_queue(v1);
+}
+
+template <class T>
+void PrioQueue<T>::MultByMax(T max)
+{
+	vector<T> v1;
+	while (!q.empty())
+	{
+		v1.push_back(q.top() * max);
+		q.pop();
+	}
+	q = vector_to_queue(v1);
+}
 
 //
