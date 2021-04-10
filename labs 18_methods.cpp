@@ -1,6 +1,7 @@
 #include <iostream>
+#include <vector>
+#include <iterator>
 #include <cmath>
-#include <sstream>
 #include "classes.h"
 using namespace std;
 
@@ -109,21 +110,21 @@ int Exam::GetMark()
 
 Money::Money()
 {
-	cout << "\nConstr. w/o params for the object " << this << endl;
+	
 	rub = 0;
 	cent = 0;
 }
 
 Money::Money(long rub, int cent)
 {
-	cout << "\nConstr. with params for the object " << this << endl;
+	
 	this->rub = rub;
 	this->cent = cent;
 }
 
 Money::Money(const Money& object)
 {
-	cout << "\nConstr. copy for the object " << this << " from " << &object << endl;
+	
 	rub = object.rub;
 	cent = object.cent;
 }
@@ -199,11 +200,19 @@ bool Money::operator > (const Money& obj)
 	else return false;
 }
 
+bool Money::operator< (const Money& obj) const
+{
+	if (rub < obj.rub) return true;
+	else if (rub > obj.rub) return false;
+	else if (cent < obj.cent) return true;
+	else return false;
+}
+
 void Money::operator+(float bal)
-{	
+{
 	int cent_concatenate = cent + round(stof(to_string(0) + to_string(bal).substr(to_string(bal).find('.'), to_string(bal).find('.') + 2)) * 100);
 	cent = cent_concatenate % 100;
-	rub += (int)bal + cent_concatenate / 100;	
+	rub += (int)bal + cent_concatenate / 100;
 }
 
 ////
@@ -539,6 +548,4 @@ void Dialog::HandleEvent(TEvent& event)
 
 	};
 }
-// 
-
 
