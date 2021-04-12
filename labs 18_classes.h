@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <iterator>
+#include <map>
 #include <string>
 
 using namespace std;
@@ -592,3 +594,107 @@ void PrioQueue<T>::MultByMax(T max)
 }
 
 //
+
+// 18.12
+
+template <class T>
+class Multimap
+{
+public:
+	Multimap(int);
+	T Min();
+	T Max();
+	T SredArifm();
+	void AddMin(int, T);
+	void Del(T);
+	void MultByMax(T);
+	void Print();
+private:
+	multimap<int, T>mfl;
+
+};
+
+template <class T>
+void Multimap<T>::Print()
+{
+	for (typename multimap<int, T>::iterator mMIt = mfl.begin(); mMIt != mfl.end(); ++mMIt)
+	{
+		cout << "\nKey: " << mMIt->first << "\nParam: " << mMIt->second;
+	}
+}
+
+template <class T>
+Multimap<T>::Multimap(int len)
+{
+	for (int i = 0; i < len; ++i)
+	{
+		mfl.insert(make_pair(rand() % 10, 7.6 + (50 - rand() % 101) + i / 4.2));
+	}
+}
+
+template <class T>
+T Multimap<T>::Min()
+{
+	float minFl = mfl.begin()->second;
+	for (typename multimap<int, T>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+	{
+		if (mflIt->second < minFl) minFl = mflIt->second;
+	}
+	cout << "\nMin: " << minFl << endl;
+	return minFl;
+}
+
+template <class T>
+T Multimap<T>::Max()
+{
+	float maxFl = mfl.begin()->second;
+	for (typename multimap<int, T>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+	{
+		if (mflIt->second > maxFl) maxFl = mflIt->second;
+	}
+	cout << "\n\nMax: " << maxFl << endl;
+	return maxFl;
+}
+
+template <class T>
+T Multimap<T>::SredArifm()
+{
+	float sred_arifm = 0;
+	for (typename multimap<int, T>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+	{
+		sred_arifm += mflIt->second;
+	}
+	sred_arifm /= (T)mfl.size();
+	cout << "\n\nSred Arifm: " << sred_arifm << endl;
+	return sred_arifm;
+}
+
+template <class T>
+void Multimap<T>::AddMin(int pos, T min)
+{
+	mfl.insert(make_pair(pos, min));
+}
+
+template <class T>
+void Multimap<T>::Del(T sred)
+{
+	cout << "\nAfter Del > Sred Arifm\n";
+	for (typename multimap<int, T>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); )
+	{
+		if (mflIt->second > sred)
+		{
+			mfl.erase(mflIt++);
+		}
+		else ++mflIt;
+	}
+}
+
+template <class T>
+void Multimap<T>::MultByMax(T max)
+{
+	cout << "\nAfter MultByMax\n";
+	for (typename multimap<int, T>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+	{
+		mflIt->second *= max;
+	}
+}
