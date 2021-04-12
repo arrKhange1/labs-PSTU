@@ -7,6 +7,7 @@
 #include <fstream>
 #include <queue>
 #include <vector>
+#include <map>
 #include <iterator>
 #include "classes.h"
 using namespace std;
@@ -494,6 +495,164 @@ void QueueMultByMax(priority_queue<Money>& MoneyPriora, Money& money_max)
 
 
 //
+
+// 18.12
+
+void MakeMap(multimap<int, float>& mfl)
+{
+    cout << "\nEnter a size of multimap: "; int len; cin >> len; cout << endl;
+    for (int i = 0; i < len; ++i)
+    {
+        mfl.insert(make_pair(rand() % 10, 7.6 + (50 - rand() % 101) + i / 4.2));
+    }
+}
+
+void MakeMap(multimap<int, Money>& mM)
+{
+    cout << "\nEnter a size of multimap: "; int len; cin >> len; cout << endl;
+    for (int i = 0; i < len; ++i)
+    {
+        Money temp(rand() % 500, rand() % 100);
+        mM.insert(make_pair(rand() % 10, temp));
+    }
+}
+
+void PrintMap(multimap<int, float>& mfl)
+{
+    for (multimap<int, float>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+    {
+        cout << "\nKey: " << mflIt->first << "\nParam: " << mflIt->second;
+    }
+    cout << endl;
+}
+
+void PrintMap(multimap<int, Money>& mM)
+{
+    for (multimap<int, Money>::iterator mMIt = mM.begin(); mMIt != mM.end(); ++mMIt)
+    {
+        cout << "\nKey: " << mMIt->first << "\nParam: " << mMIt->second;
+    }
+}
+
+float MinMap(multimap<int, float>& mfl)
+{
+    float minFl = mfl.begin()->second;
+    for (multimap<int, float>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+    {
+        if (mflIt->second < minFl) minFl = mflIt->second;
+    }
+    cout << "\nMin: " << minFl << endl;
+    return minFl;
+}
+
+Money MinMap(multimap<int, Money>& mM)
+{
+    Money money_min = mM.begin()->second;
+    for (multimap<int, Money>::iterator mMIt = mM.begin(); mMIt != mM.end(); ++mMIt)
+    {
+        if (mMIt->second < money_min) money_min = mMIt->second;
+    }
+    cout << "\nMin: " << money_min << endl;
+    return money_min;
+}
+
+float SredArifmMap(multimap<int, float>& mfl)
+{
+    float sred_arifm = 0;
+    for (multimap<int, float>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+    {
+        sred_arifm += mflIt->second;
+    }
+    sred_arifm /= (float)mfl.size();
+    cout << "\nSred Arifm: " << sred_arifm << endl;
+    return sred_arifm;
+}
+
+float SredArifmMap(multimap<int, Money>& mM)
+{
+    float sred_arifm_m = 0;
+    for (multimap<int, Money>::iterator mMIt = mM.begin(); mMIt != mM.end(); ++mMIt)
+    {
+        sred_arifm_m += stof(to_string(mMIt->second.GetRub()) + "." + to_string(mMIt->second.GetCent())) / (float)mM.size();
+    }
+    cout << "\nSred_Arifm = " << sred_arifm_m << "\n\n";
+    return sred_arifm_m;
+}
+
+void DelMap(multimap<int, float>& mfl)
+{
+    cout << "\nAfter Del > Sred Arifm\n";
+    float sred_arifm = SredArifmMap(mfl);
+    for (multimap<int, float>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); )
+    {
+        if (mflIt->second > sred_arifm)
+        {
+            mfl.erase(mflIt++);
+        }
+        else ++mflIt;
+    }
+}
+
+void DelMap(multimap<int, Money>& mM)
+{
+    cout << "\nAfter Del > Sred Arifm\n";
+    float sred_arifm_m = SredArifmMap(mM);
+    Money sred_arifm1;
+    sred_arifm1.SetRub((int)sred_arifm_m); sred_arifm1.SetCent((sred_arifm_m - (int)sred_arifm_m) * 100);
+    for (multimap<int, Money>::iterator mMIt = mM.begin(); mMIt != mM.end();)
+    {
+        if (mMIt->second > sred_arifm1) mM.erase(mMIt++);
+        else ++mMIt;
+    }
+}
+
+float MaxMap(multimap<int, float>& mfl)
+{
+    float maxFl = mfl.begin()->second;
+    for (multimap<int, float>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+    {
+        if (mflIt->second > maxFl) maxFl = mflIt->second;
+    }
+    cout << "\nMax: " << maxFl << endl;
+    return maxFl;
+}
+
+Money MaxMap(multimap<int, Money>& mM)
+{
+    Money money_max = mM.begin()->second;
+    for (multimap<int, Money>::iterator mMIt = mM.begin(); mMIt != mM.end(); ++mMIt)
+    {
+        if (mMIt->second > money_max) money_max = mMIt->second;
+    }
+    cout << "\nMax: " << money_max << endl;
+    return money_max;
+}
+
+void MultByMaxMap(multimap<int, float>& mfl)
+{
+    cout << "\nAfter MultByMax\n";
+    float maxFl = MaxMap(mfl);
+    for (multimap<int, float>::iterator mflIt = mfl.begin(); mflIt != mfl.end(); ++mflIt)
+    {
+        mflIt->second *= maxFl;
+    }
+}
+
+void MultByMaxMap(multimap<int, Money>& mM)
+{
+    cout << "\nAfter MultBymax\n";
+    Money money_max = MaxMap(mM);
+    float moneymax = stof(to_string(money_max.GetRub()) + "." + to_string(money_max.GetCent()));
+    float multiple = 1;
+    for (multimap<int, Money>::iterator mMIt = mM.begin(); mMIt != mM.end(); ++mMIt)
+    {
+        multiple = moneymax * stof(to_string(mMIt->second.GetRub()) + "." + to_string(mMIt->second.GetCent()));
+        mMIt->second.SetRub((int)multiple);
+        mMIt->second.SetCent((multiple - (int)multiple) * 100);
+    }
+}
+
+// 
 
 int main()
 {
@@ -1034,6 +1193,131 @@ int main()
 
 
 
+
+            break;
+        }
+
+        case 12:
+        {
+            // multimap FLOAT done
+            cout << "\n\nmultimap FLOAT\n\n";
+
+            typedef multimap<int, float> mmFl;
+            mmFl mfl;
+            
+            // make map
+            MakeMap(mfl);
+            //
+
+            // print
+            PrintMap(mfl);
+            //
+
+            // Insertion on a pos
+            cout << "\nEnter a position to insert an element there: "; int pos; cin >> pos; cout << "\nAfter Insertion on a position\n";
+            mfl.insert(make_pair(pos, MinMap(mfl)));
+            //
+
+            // print
+            PrintMap(mfl);
+            //
+
+            // Del > Sred Arifm
+            DelMap(mfl);
+            //
+
+            // print
+            PrintMap(mfl);
+            //
+
+            // MultByMax
+            MultByMaxMap(mfl);
+            //
+
+            // print
+            PrintMap(mfl);
+            //
+
+            // multimap FLOAT done
+
+            // multimap MONEY done
+            cout << "\n\nmultimap MONEY\n\n";
+
+            typedef multimap<int, Money> mmMoney;
+            mmMoney mM;
+
+            // make multimap
+            MakeMap(mM);
+            //
+
+            // print
+            PrintMap(mM);
+            //
+
+            // Insertion on a pos
+            cout << "\nEnter a position to insert an element there: "; cin >> pos; cout << "\nAfter Insertion on a position\n";
+            mM.insert(make_pair(pos, MinMap(mM)));
+            //
+
+            // print 
+            PrintMap(mM);
+            //
+
+            // Del > Sred Arifm
+            DelMap(mM);
+            //
+
+            // print 
+            PrintMap(mM);
+            //
+
+            // MultByMax
+            MultByMaxMap(mM);
+            //
+
+            // print
+            PrintMap(mM);
+            //
+
+            // multimap MONEY done
+
+            // multimap PARAM CLASS done
+            cout << "\n\nmultimap PARAM CLASS\n\n";
+
+            // make map
+            Multimap<int> mapa(5);
+            //
+
+            // print
+            mapa.Print();
+            //
+
+            // add min
+            cout << "\n\nEnter a position to insert an element there: "; cin >> pos; cout << "\nAfter Insertion on a position\n";
+            mapa.AddMin(pos, mapa.Min());
+            //
+
+            // print
+            mapa.Print();
+            //
+
+            // Del > Sred Arifm
+            mapa.Del(mapa.SredArifm());
+            //
+
+            // print
+            mapa.Print();
+            //
+
+            // MultByMax
+            mapa.MultByMax(mapa.Max());
+            //
+
+            // print
+            mapa.Print();
+            //
+
+            // multimap PARAM CLASS done
 
             break;
         }
