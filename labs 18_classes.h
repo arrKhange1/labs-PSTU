@@ -54,7 +54,7 @@ public:
 	Money& operator = (const Money&);
 	bool operator == (const Money&);
 	bool operator != (const Money&);
-	bool operator > (const Money&);
+	bool operator > (const Money&)const;
 	bool operator< (const Money& p)const;
 	void operator + (float);
 	Money& operator -- ();
