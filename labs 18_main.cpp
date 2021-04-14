@@ -9,6 +9,7 @@
 #include <vector>
 #include <map>
 #include <iterator>
+#include <functional>
 #include "classes.h"
 using namespace std;
 
@@ -1333,7 +1334,7 @@ int main()
             // make vec
             for (int i = 0; i < len; ++i)
             {
-                Money temp(rand()%500, rand()%100);
+                Money temp(rand() % 500, rand() % 100);
                 vec.push_back(temp);
             }
             //
@@ -1348,26 +1349,33 @@ int main()
             cout << "\nMin Elem: " << *it_min << endl;
             //
 
-            // Replace with Min
+            // Replace with Min 
             int pos; cout << "\nEnter a pos: "; cin >> pos;
-            replace(vec.begin()+(pos-1), vec.begin() + pos,*(vec.begin() + (pos-1)), *it_min);
+            replace(vec.begin() + (pos - 1), vec.begin() + pos, *(vec.begin() + (pos - 1)), *it_min);
             cout << endl;
-            //
-
-            // Remove if > Sred Arifm
-            
-            /*float sred = SredArifm(vec);
-            Money sred1;
-            sred1.SetRub((int)sred); sred1.SetCent((sred - (int)sred) * 100);*/
-
-
             //
 
             // print
             for (int i = 0; i < vec.size(); ++i) cout << vec[i] << " ";
             cout << endl;
             //
-           
+
+            // Remove if > Sred Arifm ((remove_if doesnt delete elems. it moves them to the end of a container and returns iterator on the first pointer of deleting elements)
+            float sred_ar = SredArifm(vec);
+            Money sr_ar;
+            sr_ar.SetRub((int)sred_ar); sr_ar.SetCent((sred_ar - (int)sred_ar) * 100);
+
+            MoneyVec::iterator it = vec.begin();
+            vec.erase(remove_if(it, it+vec.size(), bind2nd(greater<Money>(), sr_ar)), vec.end());
+            //
+
+            // print
+            for (int i = 0; i < vec.size(); ++i) cout << vec[i] << " ";
+            cout << endl;
+            //
+
+
+
 
             break;
         }
