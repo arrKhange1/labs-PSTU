@@ -192,7 +192,7 @@ Money Money::operator--(int value)
 	return temp;
 }
 
-bool Money::operator > (const Money& obj)
+bool Money::operator> (const Money& obj) const
 {
 	if (rub > obj.rub) return true;
 	else if (rub < obj.rub) return false;
