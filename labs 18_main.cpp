@@ -224,7 +224,7 @@ void Increase(ifstream& infile, Money& somuch)
     {
         if (temp == somuch)
         {
-            temp + 1.5;
+            temp + 101.04;
         }
         outfile.write(reinterpret_cast<char*>(&temp), sizeof(Money));
     }
@@ -241,7 +241,7 @@ void PrintVect(vector<T>& vect)
     for (int i = 0; i < vect.size(); ++i) cout << vect[i] << " ";
 }
 
-void MakeVec(vector<float>&vectFl,int len)
+void MakeVec(vector<float>& vectFl, int len)
 {
     for (int i = 0; i < len; ++i)
     {
@@ -396,7 +396,7 @@ priority_queue<Money> vector_to_queue(vector<Money> v)
     return q;
 }
 
-void MakeQueue(priority_queue<Money>&q,int len)
+void MakeQueue(priority_queue<Money>& q, int len)
 {
     for (int i = 0; i < len; ++i)
     {
@@ -463,7 +463,7 @@ float QueueSredArifm(priority_queue<Money>& MoneyPriora)
     return sred_arifm_m;
 }
 
-void QueueDel(priority_queue<Money>&MoneyPriora, float sred_arifm_m)
+void QueueDel(priority_queue<Money>& MoneyPriora, float sred_arifm_m)
 {
     vector<Money> v1;
     Money sred_arifm;
@@ -652,7 +652,10 @@ void MultByMaxMap(multimap<int, Money>& mM)
     }
 }
 
-// 
+//
+
+// 18.13
+
 
 int main()
 {
@@ -663,7 +666,7 @@ int main()
     while (go)
     {
         cout << "It is the menu! Choose one of the labs below:\n\n";
-        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6(7). Lab 18.6\n8. Lab 18.8\n9. Lab 18.9\n10. Lab 18.10\n\n";
+        cout << "1. Lab 18.1\n2. Lab 18.2\n3. Lab 18.3\n4. Lab 18.4\n5. Lab 18.5\n6(7). Lab 18.6\n8. Lab 18.8\n9. Lab 18.9\n10. Lab 18.10\n11. Lab 18.11\n12. Lab 18.12\n\n";
         cin >> choice;
         switch (choice)
         {
@@ -1022,43 +1025,43 @@ int main()
         {
 
             // FLOAT VEC done
-            
+
             typedef vector<float> VectorFl;
             VectorFl vectFl;
-            
+
             // making a vector
             int len_vectorFl;
             cout << "\nEnter length of a vector: "; cin >> len_vectorFl;
-            MakeVec(vectFl,len_vectorFl);
+            MakeVec(vectFl, len_vectorFl);
             PrintVect(vectFl);
             cout << "\n\n";
-            
+
             // add min elem on a position
             int pos; cout << "Enter a position to insert an element there: "; cin >> pos;
-            vectFl.insert(vectFl.begin()+(pos-1), FindMin(vectFl));
+            vectFl.insert(vectFl.begin() + (pos - 1), FindMin(vectFl));
             //
             cout << "\nAfter insertion\n";
             PrintVect(vectFl);
-            
+
             // del elems
             cout << "\n\nAfter Del Elems\n";
             DelFromVec(vectFl, SredArifm(vectFl));
             cout << endl;
             //
             PrintVect(vectFl);
-            
+
             // multiplying by max elem
             float max_fl = FindMax(vectFl);
             MultByMaxInVec(vectFl, max_fl);
-           
+
             cout << "\n\nResult: ";
             PrintVect(vectFl);
             cout << "\n\n";
-            
+
             // FLOAT VEC done
 
             // PARAM CLASS VECTOR done // 
-            
+
             cout << "\n\nParam class\n\n";
             Vect<int> v(len_vectorFl);
             v.Print();
@@ -1082,7 +1085,7 @@ int main()
 
             typedef vector<Money> MoneyVec;
             MoneyVec mv;
-            
+
             // make vec
             MakeVec(mv, len_vectorFl);
             PrintVect(mv);
@@ -1095,14 +1098,14 @@ int main()
             cout << "\nAfter Insertion\n";
             PrintVect(mv);
             cout << endl;
-            
+
             // del > sr arifm
             cout << "\nAfter Del Elems\n";
             DelFromVec(mv, SredArifm(mv));
             PrintVect(mv);
             cout << endl;
             //
-           
+
             // mult all by money max
             cout << "After Mult all by Money Max\n";
             Money money_max = FindMax(mv);
@@ -1110,7 +1113,7 @@ int main()
 
             PrintVect(mv);
             cout << endl;
-            
+
             // VECT TYPE MONEY done //
 
             // ADAPTER (TASK 4) PRIORITY_QUEUE done
@@ -1175,7 +1178,7 @@ int main()
             cout << "\nInsertion in a queue\n";
             qq.Print();
             //
-            
+
             // Del > Sred Arifm
             qq.Del(qq.SredArifm());
             cout << "\nAfter Del > Sred Arifm\n";
@@ -1187,7 +1190,7 @@ int main()
             cout << "\nAfter MultByMax\n";
             qq.Print();
             //
-            
+
             // ADAPTER (TASK 5) done
 
 
@@ -1204,7 +1207,7 @@ int main()
 
             typedef multimap<int, float> mmFl;
             mmFl mfl;
-            
+
             // make map
             MakeMap(mfl);
             //
@@ -1318,6 +1321,53 @@ int main()
             //
 
             // multimap PARAM CLASS done
+
+            break;
+        }
+
+        case 13:
+        {
+            typedef vector<Money> MoneyVec;
+            MoneyVec vec;
+            int len; cout << "\nEnter a length of a vector: "; cin >> len; cout << endl;
+            // make vec
+            for (int i = 0; i < len; ++i)
+            {
+                Money temp(rand()%500, rand()%100);
+                vec.push_back(temp);
+            }
+            //
+
+            // print
+            for (int i = 0; i < vec.size(); ++i) cout << vec[i] << " ";
+            cout << endl;
+            //
+
+            // Min elem
+            MoneyVec::iterator it_min = min_element(vec.begin(), vec.end());
+            cout << "\nMin Elem: " << *it_min << endl;
+            //
+
+            // Replace with Min
+            int pos; cout << "\nEnter a pos: "; cin >> pos;
+            replace(vec.begin()+(pos-1), vec.begin() + pos,*(vec.begin() + (pos-1)), *it_min);
+            cout << endl;
+            //
+
+            // Remove if > Sred Arifm
+            
+            /*float sred = SredArifm(vec);
+            Money sred1;
+            sred1.SetRub((int)sred); sred1.SetCent((sred - (int)sred) * 100);*/
+
+
+            //
+
+            // print
+            for (int i = 0; i < vec.size(); ++i) cout << vec[i] << " ";
+            cout << endl;
+            //
+           
 
             break;
         }
