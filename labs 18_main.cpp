@@ -656,7 +656,10 @@ void MultByMaxMap(multimap<int, Money>& mM)
 //
 
 // 18.13
-
+void Mult(Money maxim, Money& elem)
+{
+    elem.SetRub(1);
+}
 
 int main()
 {
@@ -1366,7 +1369,7 @@ int main()
             sr_ar.SetRub((int)sred_ar); sr_ar.SetCent((sred_ar - (int)sred_ar) * 100);
 
             MoneyVec::iterator it = vec.begin();
-            vec.erase(remove_if(it, it+vec.size(), bind2nd(greater<Money>(), sr_ar)), vec.end());
+            vec.erase(remove_if(it, it + vec.size(), bind2nd(greater<Money>(), sr_ar)), vec.end());
             //
 
             // print
@@ -1374,7 +1377,20 @@ int main()
             cout << endl;
             //
 
+            // Max Elem
+            MoneyVec::iterator max_it = max_element(vec.begin(), vec.end());
+            cout << "\nMax Element: " << *max_it << endl;
+            //
 
+            // MultByMax // dodelat
+            it = vec.begin();
+            for_each(it, it + vec.size(), [max_it](Money& t){t.SetRub((t.GetRub()*100+t.GetCent())); });
+            //
+            
+            // print
+            for (int i = 0; i < vec.size(); ++i) cout << vec[i] << " ";
+            cout << endl;
+            //
 
 
             break;
