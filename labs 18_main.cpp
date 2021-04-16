@@ -8,6 +8,7 @@
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <iterator>
 #include <functional>
 #include "classes.h"
@@ -580,6 +581,14 @@ float SredArifmMap(multimap<int, Money>& mM)
     return sred_arifm_m;
 }
 
+float SredArifmSet(multiset<Money>& ms)
+{
+    float sred_arifm_m = 0;
+    for_each(ms.begin(), ms.end(), [ms, &sred_arifm_m](Money t) {sred_arifm_m += stof(to_string(t.GetRub()) + "." + to_string(t.GetCent())) / (float)ms.size(); });
+    cout << "\nSred_Arifm = " << sred_arifm_m << "\n\n";
+    return sred_arifm_m;
+}
+
 void DelMap(multimap<int, float>& mfl)
 {
     cout << "\nAfter Del > Sred Arifm\n";
@@ -603,6 +612,18 @@ void DelMap(multimap<int, Money>& mM)
     for (multimap<int, Money>::iterator mMIt = mM.begin(); mMIt != mM.end();)
     {
         if (mMIt->second > sred_arifm1) mM.erase(mMIt++);
+        else ++mMIt;
+    }
+}
+
+void DelSet(multiset<Money>& mM)
+{
+    float sred_arifm_m = SredArifmSet(mM);
+    Money sred_arifm1;
+    sred_arifm1.SetRub((int)sred_arifm_m); sred_arifm1.SetCent((sred_arifm_m - (int)sred_arifm_m) * 100);
+    for (multiset<Money>::iterator mMIt = mM.begin(); mMIt != mM.end();)
+    {
+        if (*(mMIt) > sred_arifm1) mM.erase(mMIt++);
         else ++mMIt;
     }
 }
@@ -1331,10 +1352,13 @@ int main()
 
         case 13:
         {
+            // VEC done
+
             typedef vector<Money> MoneyVec;
             MoneyVec vec;
-            int len; cout << "\nEnter a length of a vector: "; cin >> len; cout << endl;
+            
             // make vec
+            int len; cout << "\nEnter a length of a vector: "; cin >> len; cout << endl;
             for (int i = 0; i < len; ++i)
             {
                 Money temp(rand() % 500, rand() % 100);
@@ -1353,6 +1377,7 @@ int main()
             //
 
             // Replace with Min 
+            cout << "\nAfter Replace with Min\n";
             int pos; cout << "\nEnter a pos: "; cin >> pos;
             replace(vec.begin() + (pos - 1), vec.begin() + pos, *(vec.begin() + (pos - 1)), *it_min);
             cout << endl;
@@ -1364,6 +1389,7 @@ int main()
             //
 
             // Remove if > Sred Arifm ((remove_if doesnt delete elems. it moves them to the end of a container and returns iterator on the first pointer of deleting elements)
+            cout << "\nAfter Remove if > Sred Arifm\n";
             float sred_ar = SredArifm(vec);
             Money sr_ar;
             sr_ar.SetRub((int)sred_ar); sr_ar.SetCent((sred_ar - (int)sred_ar) * 100);
@@ -1380,18 +1406,78 @@ int main()
             // Max Elem
             MoneyVec::iterator max_it = max_element(vec.begin(), vec.end());
             cout << "\nMax Element: " << *max_it << endl;
+            Money money_max = *max_it;
             //
 
-            // MultByMax // dodelat
-            it = vec.begin();
-            for_each(it, it + vec.size(), [max_it](Money& t){t.SetRub((t.GetRub()*100+t.GetCent())); });
+            // MultByMax // 
+            cout << "\nAfter MultByMax\n";
+            for (Money& el : vec)
+            {
+                el *= (money_max);
+            }
             //
-            
+
             // print
             for (int i = 0; i < vec.size(); ++i) cout << vec[i] << " ";
             cout << endl;
             //
 
+            // VEC done
+
+            // MULTISET (all values are automatically sorted in increasing order)
+            cout << "\nMULTISET\n";
+            typedef multiset<Money> mset;
+            mset ms;
+
+            // make set
+            for (int i = 0; i < 5; ++i)
+            {
+                Money temp(rand()%500, rand()%100);
+                ms.insert(temp);
+            }
+            //
+
+            // print
+            for_each(ms.begin(), ms.end(), [](Money t) {cout << t << endl; });
+            //
+
+            // AddMin
+            Money min_el = *ms.begin();
+            ms.insert(min_el);
+            //
+
+            // print
+            cout << "\nAfter AddMin\n";
+            for_each(ms.begin(), ms.end(), [](Money t) {cout << t << endl; });
+            //
+
+            // Remove if > Sred Arifm
+            DelSet(ms);
+            
+            //
+
+            // print
+            cout << "\nAfter Del > Sred Arifm\n";
+            for_each(ms.begin(), ms.end(), [](Money t) {cout << t << endl; });
+            //
+            
+            // MultByMax
+            Money max_elem = *max_element(ms.begin(), ms.end());
+            mset ms_help;
+            
+            for (Money elem : ms)
+            {
+                elem *= (max_elem);
+                ms_help.insert(elem);
+            }
+            ms.swap(ms_help);
+            ms_help.clear();
+            //
+
+            // print
+            cout << "\nAfter MultByMax\n";
+            for_each(ms.begin(), ms.end(), [](Money t) {cout << t << endl; });
+            //
 
             break;
         }
