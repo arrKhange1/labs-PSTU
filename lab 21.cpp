@@ -23,7 +23,7 @@ int main()
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     queue <int> QUEUE;
-    cout << "Ââåäèòå íà÷àëüíóþ âåðøèíó (1<=x<=" << len << ")\n";
+    cout << "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã­Ã Ã·Ã Ã«Ã¼Ã­Ã³Ã¾ Ã¢Ã¥Ã°Ã¸Ã¨Ã­Ã³ (1<=x<=" << len << ")\n";
     cin >> x;
     x--;
     result[x] = 0;
@@ -50,10 +50,10 @@ int main()
         QUEUE.pop();
         if (QUEUE.size() == 0) break;
     }
-    cout << "Êðàò÷àéøèå ïóòè:\n";
+    cout << "ÃŠÃ°Ã Ã²Ã·Ã Ã©Ã¸Ã¨Ã¥ Ã¯Ã³Ã²Ã¨:\n";
     for (int i = 0; i < len; i++)
     {
-        if (result[i] == 10000) cout << i + 1 << " - íåäîñòóïåí\n";
+        if (result[i] == 10000) cout << i + 1 << " - Ã­Ã¥Ã¤Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­\n";
         else cout << i + 1 << " - " << result[i] << endl;
     }
 
